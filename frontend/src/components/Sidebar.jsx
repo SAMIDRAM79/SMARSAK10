@@ -11,6 +11,10 @@ const Sidebar = () => {
 
   const menuItems = [
     { path: '/', icon: Home, label: 'Tableau de bord' },
+    { path: '/parametres', icon: Settings, label: 'Paramètres' },
+    { path: '/import', icon: Upload, label: 'Import Données' },
+    { path: '/repartition', icon: MapPin, label: 'Répartition CEPE' },
+    { path: '/documents', icon: FileSpreadsheet, label: 'Documents Officiels' },
     { path: '/students', icon: Users, label: 'Élèves' },
     { path: '/classes', icon: BookOpen, label: 'Classes' },
     { path: '/notes', icon: FileText, label: 'Notes' },
