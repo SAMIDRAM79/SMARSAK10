@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MessageCircle, Phone, Mail, FileText } from 'lucide-react';
 import Header from '../components/Header';
+import { ticketAPI } from '../services/api';
 
 const SupportPage = () => {
   const [ticketData, setTicketData] = useState({
@@ -10,11 +11,34 @@ const SupportPage = () => {
     priority: 'normal',
     description: '',
   });
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState('');
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Cette fonction sera connectée au backend plus tard
-    alert('Votre ticket de support a été créé! Nous vous répondrons rapidement.');
+    setLoading(true);
+    setError('');
+    setSuccess('');
+    
+    try {
+      const response = await ticketAPI.createTicket(ticketData);
+      setSuccess(`Ticket créé avec succès! Numéro de ticket: ${response.data.ticket_number}`);
+      
+      // Reset form
+      setTicketData({
+        name: '',
+        email: '',
+        subject: '',
+        priority: 'normal',
+        description: '',
+      });
+    } catch (err) {
+      setError('Erreur lors de la création du ticket. Veuillez réessayer.');
+      console.error('Ticket error:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e) => {
