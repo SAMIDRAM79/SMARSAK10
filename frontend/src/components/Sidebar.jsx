@@ -25,8 +25,11 @@ const Sidebar = () => {
   return (
     <div className="w-64 bg-gradient-to-b from-[#1B89C7] to-[#1565A0] text-white min-h-screen fixed left-0 top-0 shadow-2xl">
       <div className="p-6">
-        <h1 className="text-3xl font-bold mb-2">SMARTSAK10</h1>
-        <p className="text-sm opacity-90">Gestion Scolaire</p>
+        <div className="flex items-center justify-center mb-4">
+          <img src="/logo-iepp.jpg" alt="IEPP SAKASSOU" className="w-32 h-32 rounded-full bg-white p-2" />
+        </div>
+        <h1 className="text-3xl font-bold mb-2 text-center">SMARTSAK10</h1>
+        <p className="text-sm opacity-90 text-center">Gestion Scolaire</p>
         <div className="mt-4 p-3 bg-white bg-opacity-20 rounded-lg">
           <p className="text-xs font-semibold">Administrateur</p>
           <p className="text-xs opacity-90 truncate">konatdra@gmail.com</p>
