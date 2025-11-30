@@ -211,8 +211,8 @@ const CartesGeneration = () => {
                 ))}
               </div>
 
-              <div className="mt-6 p-4 bg-gray-50 rounded-lg">
-                <h4 className="font-semibold mb-2">Informations sur les cartes :</h4>
+              <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-green-50 rounded-lg border border-blue-200">
+                <h4 className="font-semibold mb-2 text-blue-800">✨ Informations sur les cartes :</h4>
                 <ul className="text-sm text-gray-700 space-y-1">
                   <li>✓ 8 cartes par page A4</li>
                   <li>✓ Photo du candidat</li>
@@ -221,7 +221,8 @@ const CartesGeneration = () => {
                   <li>✓ Nom de l'école</li>
                   <li>✓ Classe et Niveau</li>
                   <li>✓ Emplacement émargement directeur</li>
-                  <li>✓ Logo IEPP SAKASSOU</li>
+                  <li>✓ <strong>Logo IEPP SAKASSOU sur TOUTES les cartes</strong></li>
+                  <li>✓ <strong>Couleurs vives et attrayantes</strong></li>
                 </ul>
               </div>
             </CardContent>
