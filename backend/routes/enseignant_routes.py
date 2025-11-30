@@ -22,6 +22,9 @@ async def create_enseignant(enseignant: EnseignantCreate, email: str = Depends(v
         )
     
     enseignant_dict = enseignant.model_dump()
+    # Convert date to string for MongoDB compatibility
+    if isinstance(enseignant_dict.get("date_embauche"), date):
+        enseignant_dict["date_embauche"] = enseignant_dict["date_embauche"].isoformat()
     enseignant_dict["statut"] = "actif"
     
     result = await db.enseignants.insert_one(enseignant_dict)
