@@ -110,7 +110,7 @@ async def seed_database():
             "telephone": "0703040506",
             "email": "m.kone@smartsak10.edu",
             "specialite": "Sciences",
-            "date_embauche": date(2021, 9, 1),
+            "date_embauche": "2021-09-01",
             "statut": "actif"
         },
         {
