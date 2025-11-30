@@ -88,7 +88,7 @@ async def seed_database():
             "telephone": "0701020304",
             "email": "jb.kouame@smartsak10.edu",
             "specialite": "Français",
-            "date_embauche": date(2020, 9, 1),
+            "date_embauche": "2020-09-01",
             "statut": "actif"
         },
         {
