@@ -22,9 +22,25 @@ ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env', override=False)
 
 # MongoDB connection
-mongo_url = os.environ['MONGO_URL']
+mongo_url = os.environ.get('MONGO_URL', 'mongodb://localhost:27017')
+
+# Extract database name from MONGO_URL if it contains one, otherwise use DB_NAME env var
+# MongoDB Atlas URLs format: mongodb+srv://user:pass@host/database_name?options
+import re
+db_name_from_url = None
+if '//' in mongo_url and '/' in mongo_url.split('//', 1)[1]:
+    # Extract database name from URL
+    url_parts = mongo_url.split('//', 1)[1].split('/', 1)
+    if len(url_parts) > 1:
+        db_name_part = url_parts[1].split('?')[0]  # Remove query parameters
+        if db_name_part and db_name_part not in ['', 'test']:
+            db_name_from_url = db_name_part
+
+# Use database name from URL if available, otherwise from environment variable
+db_name = db_name_from_url or os.environ.get('DB_NAME', 'smartscool')
+
 client = AsyncIOMotorClient(mongo_url)
-db = client[os.environ['DB_NAME']]
+db = client[db_name]
 
 # Create the main app without a prefix
 app = FastAPI(title="SMARTSAK10 - Gestion Scolaire", version="1.0.0")
