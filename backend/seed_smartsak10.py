@@ -135,7 +135,7 @@ async def seed_database():
             "matricule": "CP1-2024-001",
             "nom": "DIALLO",
             "prenoms": "Ibrahim",
-            "date_naissance": date(2017, 3, 15),
+            "date_naissance": "2017-03-15",
             "lieu_naissance": "Abidjan",
             "genre": "masculin",
             "niveau": "primaire",
