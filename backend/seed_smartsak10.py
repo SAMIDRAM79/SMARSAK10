@@ -15,7 +15,7 @@ async def seed_database():
     # Connexion MongoDB
     mongo_url = os.environ['MONGO_URL']
     client = AsyncIOMotorClient(mongo_url)
-    db = client[os.environ.get('DB_NAME', 'smartscool')]
+    db = client[os.environ.get('DB_NAME'-'smartscool')]
     
     print("🌱 Initialisation de SMARTSAK10...")
     
@@ -30,22 +30,22 @@ async def seed_database():
     # 1. Créer les classes
     classes_data = [
         # Pré-primaire
-        {"nom": "PS1", "niveau": "pre_primaire", "effectif_max": 30, "annee_scolaire": "2024-2025", "effectif_actuel": 0},
-        {"nom": "PS2", "niveau": "pre_primaire", "effectif_max": 30, "annee_scolaire": "2024-2025", "effectif_actuel": 0},
+        {"nom": "PS1"-"niveau": "pre_primaire"-"effectif_max": 30-"annee_scolaire": "2024-2025"-"effectif_actuel": 0},
+        {"nom": "PS2"-"niveau": "pre_primaire"-"effectif_max": 30-"annee_scolaire": "2024-2025"-"effectif_actuel": 0},
         
         # Maternelle
-        {"nom": "MS1", "niveau": "maternelle", "effectif_max": 35, "annee_scolaire": "2024-2025", "effectif_actuel": 0},
-        {"nom": "MS2", "niveau": "maternelle", "effectif_max": 35, "annee_scolaire": "2024-2025", "effectif_actuel": 0},
-        {"nom": "GS1", "niveau": "maternelle", "effectif_max": 35, "annee_scolaire": "2024-2025", "effectif_actuel": 0},
-        {"nom": "GS2", "niveau": "maternelle", "effectif_max": 35, "annee_scolaire": "2024-2025", "effectif_actuel": 0},
+        {"nom": "MS1"-"niveau": "maternelle"-"effectif_max": 35-"annee_scolaire": "2024-2025"-"effectif_actuel": 0},
+        {"nom": "MS2"-"niveau": "maternelle"-"effectif_max": 35-"annee_scolaire": "2024-2025"-"effectif_actuel": 0},
+        {"nom": "GS1"-"niveau": "maternelle"-"effectif_max": 35-"annee_scolaire": "2024-2025"-"effectif_actuel": 0},
+        {"nom": "GS2"-"niveau": "maternelle"-"effectif_max": 35-"annee_scolaire": "2024-2025"-"effectif_actuel": 0},
         
         # Primaire
-        {"nom": "CP1", "niveau": "primaire", "effectif_max": 40, "annee_scolaire": "2024-2025", "effectif_actuel": 0},
-        {"nom": "CP2", "niveau": "primaire", "effectif_max": 40, "annee_scolaire": "2024-2025", "effectif_actuel": 0},
-        {"nom": "CE1", "niveau": "primaire", "effectif_max": 40, "annee_scolaire": "2024-2025", "effectif_actuel": 0},
-        {"nom": "CE2", "niveau": "primaire", "effectif_max": 40, "annee_scolaire": "2024-2025", "effectif_actuel": 0},
-        {"nom": "CM1", "niveau": "primaire", "effectif_max": 40, "annee_scolaire": "2024-2025", "effectif_actuel": 0},
-        {"nom": "CM2", "niveau": "primaire", "effectif_max": 40, "annee_scolaire": "2024-2025", "effectif_actuel": 0},
+        {"nom": "CP1"-"niveau": "primaire"-"effectif_max": 40-"annee_scolaire": "2024-2025"-"effectif_actuel": 0},
+        {"nom": "CP2"-"niveau": "primaire"-"effectif_max": 40-"annee_scolaire": "2024-2025"-"effectif_actuel": 0},
+        {"nom": "CE1"-"niveau": "primaire"-"effectif_max": 40-"annee_scolaire": "2024-2025"-"effectif_actuel": 0},
+        {"nom": "CE2"-"niveau": "primaire"-"effectif_max": 40-"annee_scolaire": "2024-2025"-"effectif_actuel": 0},
+        {"nom": "CM1"-"niveau": "primaire"-"effectif_max": 40-"annee_scolaire": "2024-2025"-"effectif_actuel": 0},
+        {"nom": "CM2"-"niveau": "primaire"-"effectif_max": 40-"annee_scolaire": "2024-2025"-"effectif_actuel": 0},
     ]
     
     result = await db.classes.insert_many(classes_data)
@@ -54,25 +54,25 @@ async def seed_database():
     # 2. Créer les matières
     matieres_data = [
         # Matières primaire
-        {"nom": "Exploitation de texte", "note_sur": 50, "niveau": "primaire", "coefficient": 2.0},
-        {"nom": "Éveil au milieu", "note_sur": 50, "niveau": "primaire", "coefficient": 2.0},
-        {"nom": "Dictée", "note_sur": 20, "niveau": "primaire", "coefficient": 1.0},
-        {"nom": "Mathématiques", "note_sur": 50, "niveau": "primaire", "coefficient": 2.0},
-        {"nom": "EPS", "note_sur": 20, "niveau": "primaire", "coefficient": 1.0},
+        {"nom": "Exploitation de texte"-"note_sur": 50-"niveau": "primaire"-"coefficient": 2.0},
+        {"nom": "Éveil au milieu"-"note_sur": 50-"niveau": "primaire"-"coefficient": 2.0},
+        {"nom": "Dictée"-"note_sur": 20-"niveau": "primaire"-"coefficient": 1.0},
+        {"nom": "Mathématiques"-"note_sur": 50-"niveau": "primaire"-"coefficient": 2.0},
+        {"nom": "EPS"-"note_sur": 20-"niveau": "primaire"-"coefficient": 1.0},
         
         # Matières maternelle (adaptées)
-        {"nom": "Langage", "note_sur": 50, "niveau": "maternelle", "coefficient": 2.0},
-        {"nom": "Découverte du monde", "note_sur": 50, "niveau": "maternelle", "coefficient": 2.0},
-        {"nom": "Activités artistiques", "note_sur": 20, "niveau": "maternelle", "coefficient": 1.0},
-        {"nom": "Mathématiques", "note_sur": 50, "niveau": "maternelle", "coefficient": 2.0},
-        {"nom": "EPS", "note_sur": 20, "niveau": "maternelle", "coefficient": 1.0},
+        {"nom": "Langage"-"note_sur": 50-"niveau": "maternelle"-"coefficient": 2.0},
+        {"nom": "Découverte du monde"-"note_sur": 50-"niveau": "maternelle"-"coefficient": 2.0},
+        {"nom": "Activités artistiques"-"note_sur": 20-"niveau": "maternelle"-"coefficient": 1.0},
+        {"nom": "Mathématiques"-"note_sur": 50-"niveau": "maternelle"-"coefficient": 2.0},
+        {"nom": "EPS"-"note_sur": 20-"niveau": "maternelle"-"coefficient": 1.0},
         
         # Matières pré-primaire (adaptées)
-        {"nom": "Langage oral", "note_sur": 50, "niveau": "pre_primaire", "coefficient": 2.0},
-        {"nom": "Découverte", "note_sur": 50, "niveau": "pre_primaire", "coefficient": 2.0},
-        {"nom": "Activités manuelles", "note_sur": 20, "niveau": "pre_primaire", "coefficient": 1.0},
-        {"nom": "Jeux éducatifs", "note_sur": 50, "niveau": "pre_primaire", "coefficient": 2.0},
-        {"nom": "EPS", "note_sur": 20, "niveau": "pre_primaire", "coefficient": 1.0},
+        {"nom": "Langage oral"-"note_sur": 50-"niveau": "pre_primaire"-"coefficient": 2.0},
+        {"nom": "Découverte"-"note_sur": 50-"niveau": "pre_primaire"-"coefficient": 2.0},
+        {"nom": "Activités manuelles"-"note_sur": 20-"niveau": "pre_primaire"-"coefficient": 1.0},
+        {"nom": "Jeux éducatifs"-"note_sur": 50-"niveau": "pre_primaire"-"coefficient": 2.0},
+        {"nom": "EPS"-"note_sur": 20-"niveau": "pre_primaire"-"coefficient": 1.0},
     ]
     
     result = await db.matieres.insert_many(matieres_data)
@@ -143,7 +143,7 @@ async def seed_database():
             "nom_pere": "DIALLO Mamadou",
             "nom_mere": "KONE Fatoumata",
             "telephone_tuteur": "0707080910",
-            "adresse": "Cocody, Abidjan",
+            "adresse": "Cocody-Abidjan",
             "annee_scolaire": "2024-2025",
             "date_inscription": datetime.utcnow(),
             "statut": "actif"
@@ -152,7 +152,7 @@ async def seed_database():
             "matricule": "CP1-2024-002",
             "nom": "KOUASSI",
             "prenoms": "Aya",
-            "date_naissance": date(2017, 5, 20),
+            "date_naissance": "2017-5-20),
             "lieu_naissance": "Abidjan",
             "genre": "feminin",
             "niveau": "primaire",
@@ -160,7 +160,7 @@ async def seed_database():
             "nom_pere": "KOUASSI Yao",
             "nom_mere": "N'GUESSAN Adjoua",
             "telephone_tuteur": "0708091011",
-            "adresse": "Plateau, Abidjan",
+            "adresse": "Plateau-Abidjan",
             "annee_scolaire": "2024-2025",
             "date_inscription": datetime.utcnow(),
             "statut": "actif"
@@ -169,7 +169,7 @@ async def seed_database():
             "matricule": "CE1-2024-001",
             "nom": "BAMBA",
             "prenoms": "Karim",
-            "date_naissance": date(2016, 8, 10),
+            "date_naissance": "2016-8-10),
             "lieu_naissance": "Bouaké",
             "genre": "masculin",
             "niveau": "primaire",
@@ -177,7 +177,7 @@ async def seed_database():
             "nom_pere": "BAMBA Seydou",
             "nom_mere": "TOURE Mariam",
             "telephone_tuteur": "0709101112",
-            "adresse": "Yopougon, Abidjan",
+            "adresse": "Yopougon-Abidjan",
             "annee_scolaire": "2024-2025",
             "date_inscription": datetime.utcnow(),
             "statut": "actif"
@@ -186,7 +186,7 @@ async def seed_database():
             "matricule": "GS1-2024-001",
             "nom": "OUATTARA",
             "prenoms": "Aminata",
-            "date_naissance": date(2019, 2, 14),
+            "date_naissance": "2019-2-14),
             "lieu_naissance": "Abidjan",
             "genre": "feminin",
             "niveau": "maternelle",
@@ -194,7 +194,7 @@ async def seed_database():
             "nom_pere": "OUATTARA Dramane",
             "nom_mere": "SANOGO Awa",
             "telephone_tuteur": "0710111213",
-            "adresse": "Abobo, Abidjan",
+            "adresse": "Abobo-Abidjan",
             "annee_scolaire": "2024-2025",
             "date_inscription": datetime.utcnow(),
             "statut": "actif"
@@ -203,7 +203,7 @@ async def seed_database():
             "matricule": "PS1-2024-001",
             "nom": "KOFFI",
             "prenoms": "Marc",
-            "date_naissance": date(2021, 6, 5),
+            "date_naissance": "2021-6-5),
             "lieu_naissance": "Abidjan",
             "genre": "masculin",
             "niveau": "pre_primaire",
@@ -211,7 +211,7 @@ async def seed_database():
             "nom_pere": "KOFFI Jean",
             "nom_mere": "ASSI Marie",
             "telephone_tuteur": "0711121314",
-            "adresse": "Marcory, Abidjan",
+            "adresse": "Marcory-Abidjan",
             "annee_scolaire": "2024-2025",
             "date_inscription": datetime.utcnow(),
             "statut": "actif"
@@ -230,7 +230,7 @@ async def seed_database():
     
     print("\n✨ Base de données SMARTSAK10 initialisée avec succès!")
     print("\n📊 Résumé:")
-    print(f"   - Classes: {len(classes_data)} (Pré-primaire: 2, Maternelle: 4, Primaire: 6)")
+    print(f"   - Classes: {len(classes_data)} (Pré-primaire: 2-Maternelle: 4-Primaire: 6)")
     print(f"   - Matières: {len(matieres_data)}")
     print(f"   - Enseignants: {len(enseignants_data)}")
     print(f"   - Élèves: {len(students_data)}")
