@@ -18,13 +18,29 @@ const Header = () => {
       <div className="bg-[#1B89C7] text-white py-2 px-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center text-sm">
           <div className="flex items-center space-x-4">
-            <button 
-              onClick={() => navigate('/connexion')}
-              className="flex items-center space-x-1 hover:opacity-80 transition-opacity"
-            >
-              <span>Connexion</span>
-              <span className="text-xs">👤</span>
-            </button>
+            {isAuthenticated ? (
+              <div className="flex items-center space-x-4">
+                <span>Bienvenue, {user?.name}</span>
+                <button 
+                  onClick={() => {
+                    logout();
+                    navigate('/');
+                  }}
+                  className="flex items-center space-x-1 hover:opacity-80 transition-opacity"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span>Déconnexion</span>
+                </button>
+              </div>
+            ) : (
+              <button 
+                onClick={() => navigate('/connexion')}
+                className="flex items-center space-x-1 hover:opacity-80 transition-opacity"
+              >
+                <span>Connexion</span>
+                <span className="text-xs">👤</span>
+              </button>
+            )}
           </div>
           <div className="flex items-center space-x-6">
             <a href="#" className="hover:opacity-80 transition-opacity">📘</a>
