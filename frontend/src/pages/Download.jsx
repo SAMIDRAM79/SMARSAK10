@@ -1,9 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Download } from 'lucide-react';
 import Header from '../components/Header';
+import { downloadAPI } from '../services/api';
 
 const DownloadPage = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [downloads, setDownloads] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const screenshots = [
     'https://images.unsplash.com/photo-1759752394755-1241472b589d',
