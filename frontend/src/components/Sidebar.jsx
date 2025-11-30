@@ -2,7 +2,8 @@ import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   Home, Users, BookOpen, FileText, GraduationCap, 
-  Calendar, CreditCard, BarChart, IdCard, Clipboard
+  Calendar, CreditCard, BarChart, IdCard, Clipboard,
+  Upload, Settings, MapPin, FileSpreadsheet
 } from 'lucide-react';
 
 const Sidebar = () => {
