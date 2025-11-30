@@ -48,11 +48,13 @@ async def root():
     }
 
 # Include all routers
-api_router.include_router(auth_routes.router)
-api_router.include_router(download_routes.router)
-api_router.include_router(product_routes.router)
-api_router.include_router(order_routes.router)
-api_router.include_router(ticket_routes.router)
+api_router.include_router(student_routes.router)
+api_router.include_router(classe_routes.router)
+api_router.include_router(matiere_routes.router)
+api_router.include_router(note_routes.router)
+api_router.include_router(bulletin_routes.router)
+api_router.include_router(stats_routes.router)
+api_router.include_router(enseignant_routes.router)
 
 # Include the router in the main app
 app.include_router(api_router)
