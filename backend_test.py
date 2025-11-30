@@ -290,88 +290,99 @@ def test_classes_filter_by_niveau():
         print_result(False, f"Classes niveau filter failed with status {response.status_code}", response.text)
         return False
 
-def test_order_creation():
-    """Test POST /api/orders"""
-    print_test_header("Order Creation")
+def test_matieres_api():
+    """Test GET /api/matieres"""
+    print_test_header("Matières API - List Subjects")
     
-    response = make_request('POST', '/orders', TEST_ORDER)
+    response = make_request('GET', '/matieres')
     if not response:
-        print_result(False, "Failed to connect to orders API")
+        print_result(False, "Failed to connect to matieres API")
         return False
     
     if response.status_code == 200:
         try:
-            result = response.json()
-            if 'order_number' in result and 'status' in result:
-                print_result(True, f"Order creation successful - Order: {result.get('order_number')}")
+            matieres = response.json()
+            if isinstance(matieres, list):
+                print_result(True, f"Matières API working - Found {len(matieres)} subjects")
+                if matieres:
+                    global matiere_id
+                    matiere_id = matieres[0].get('id')
                 return True
             else:
-                print_result(False, "Order response missing required fields", str(result))
+                print_result(False, "Matières API returned invalid format", "Expected list")
                 return False
         except json.JSONDecodeError:
-            print_result(False, "Orders API returned invalid JSON")
+            print_result(False, "Matières API returned invalid JSON")
             return False
     else:
-        print_result(False, f"Order creation failed with status {response.status_code}", response.text)
+        print_result(False, f"Matières API failed with status {response.status_code}", response.text)
         return False
 
-def test_ticket_creation():
-    """Test POST /api/tickets"""
-    print_test_header("Ticket Creation")
+def test_matieres_filter_by_niveau():
+    """Test Matières API with niveau filter"""
+    print_test_header("Matières API - Filter by Niveau")
     
-    response = make_request('POST', '/tickets', TEST_TICKET)
+    response = make_request('GET', '/matieres?niveau=primaire')
     if not response:
-        print_result(False, "Failed to connect to tickets API")
+        print_result(False, "Failed to connect to matieres API with niveau filter")
         return False
     
     if response.status_code == 200:
         try:
-            result = response.json()
-            if 'ticket_number' in result and 'status' in result:
-                print_result(True, f"Ticket creation successful - Ticket: {result.get('ticket_number')}")
+            matieres = response.json()
+            if isinstance(matieres, list):
+                print_result(True, f"Matières niveau filter working - Found {len(matieres)} primaire subjects")
                 return True
             else:
-                print_result(False, "Ticket response missing required fields", str(result))
+                print_result(False, "Matières niveau filter returned invalid format")
                 return False
         except json.JSONDecodeError:
-            print_result(False, "Tickets API returned invalid JSON")
+            print_result(False, "Matières niveau filter returned invalid JSON")
             return False
     else:
-        print_result(False, f"Ticket creation failed with status {response.status_code}", response.text)
+        print_result(False, f"Matières niveau filter failed with status {response.status_code}", response.text)
         return False
 
-def test_download_tracking():
-    """Test POST /api/downloads/track"""
-    print_test_header("Download Tracking")
+def test_create_note():
+    """Test POST /api/notes - Create Grade"""
+    print_test_header("Notes API - Create Grade")
     
-    if not download_id:
-        print_result(False, "No download ID available - skipping download tracking test")
+    if not student_id or not matiere_id:
+        print_result(False, "Missing student_id or matiere_id - skipping note creation")
         return False
     
-    track_data = {
-        "download_id": download_id,
-        "user_id": "test_user_123"
+    test_note = {
+        "student_id": student_id,
+        "matiere_id": matiere_id,
+        "type_examen": "devoir",
+        "note": 16.5,
+        "note_sur": 20,
+        "periode": "trimestre_1",
+        "annee_scolaire": "2024-2025",
+        "observation": "Très bon travail"
     }
     
-    response = make_request('POST', '/downloads/track', track_data)
+    response = make_request('POST', '/notes', test_note)
     if not response:
-        print_result(False, "Failed to connect to download tracking API")
+        print_result(False, "Failed to connect to create note API")
         return False
     
     if response.status_code == 200:
         try:
             result = response.json()
-            if 'success' in result and result['success']:
-                print_result(True, "Download tracking successful")
+            if 'id' in result and 'message' in result:
+                global note_id
+                note_id = result['id']
+                print_result(True, f"Note creation successful - ID: {note_id}")
                 return True
             else:
-                print_result(False, "Download tracking response indicates failure", str(result))
+                print_result(False, "Note creation response missing required fields", str(result))
                 return False
         except json.JSONDecodeError:
-            print_result(False, "Download tracking API returned invalid JSON")
+            print_result(False, "Note creation API returned invalid JSON")
             return False
     else:
-        print_result(False, f"Download tracking failed with status {response.status_code}", response.text)
+        print_result(False, f"Note creation failed with status {response.status_code}", response.text)
         return False
 
 def run_all_tests():
