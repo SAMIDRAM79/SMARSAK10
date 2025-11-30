@@ -94,6 +94,32 @@ async def get_dashboard_stats(email: str = Depends(verify_email)):
         },
         "annee_scolaire": annee_scolaire
     }
+    except Exception as e:
+        # Return empty stats if database is not accessible yet
+        return {
+            "effectifs": {
+                "total": 0,
+                "pre_primaire": 0,
+                "maternelle": 0,
+                "primaire": 0,
+                "garcons": 0,
+                "filles": 0
+            },
+            "classes": {
+                "total": 0,
+                "details": []
+            },
+            "personnel": {
+                "enseignants": 0
+            },
+            "finances": {
+                "total_frais_annee": 0,
+                "total_paiements": 0,
+                "taux_paiement": 0
+            },
+            "annee_scolaire": annee_scolaire,
+            "error": "Database not ready or not accessible"
+        }
 
 @router.get("/classe/{classe_nom}")
 async def get_classe_stats(classe_nom: str, email: str = Depends(verify_email)):
