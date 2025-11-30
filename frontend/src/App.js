@@ -24,6 +24,9 @@ function App() {
         <Layout>
           <Routes>
             <Route path="/" element={<Dashboard />} />
+            <Route path="/parametres" element={<Parametres />} />
+            <Route path="/import" element={<ImportDonnees />} />
+            <Route path="/repartition" element={<Repartition />} />
             <Route path="/students" element={<Students />} />
             <Route path="/classes" element={<Classes />} />
             <Route path="/notes" element={<Notes />} />
