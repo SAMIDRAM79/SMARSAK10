@@ -98,6 +98,10 @@ api_router.include_router(note_routes.router)
 api_router.include_router(bulletin_routes.router)
 api_router.include_router(stats_routes.router)
 api_router.include_router(enseignant_routes.router)
+api_router.include_router(parametres_routes.router)
+api_router.include_router(import_routes.router)
+api_router.include_router(centres_routes.router)
+api_router.include_router(repartition_routes.router)
 
 # Include the router in the main app
 app.include_router(api_router)
