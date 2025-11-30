@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-Backend API Testing Suite for SmartScool Clone Application
-Tests all backend APIs including authentication, downloads, products, orders, and tickets.
+Backend API Testing Suite for SMARTSAK10 - Système de gestion scolaire
+Tests all backend APIs including students, classes, subjects, grades, bulletins, teachers, and statistics.
 """
 
 import requests
 import json
 import sys
 import os
-from datetime import datetime
+from datetime import datetime, date
 
 # Get backend URL from frontend .env file
 def get_backend_url():
@@ -28,39 +28,60 @@ if not BACKEND_URL:
     sys.exit(1)
 
 API_BASE = f"{BACKEND_URL}/api"
-print(f"🔗 Testing backend at: {API_BASE}")
+print(f"🔗 Testing SMARTSAK10 backend at: {API_BASE}")
 
-# Test data
-TEST_USER = {
-    "name": "Jean Dupont",
-    "email": "jean.dupont@smartscool.com",
-    "password": "SecurePass123!",
-    "phone": "+33123456789",
-    "company": "École Primaire Saint-Martin"
+# Required header for all requests
+HEADERS = {
+    "X-User-Email": "konatdra@gmail.com",
+    "Content-Type": "application/json"
 }
 
-TEST_ORDER = {
-    "name": "Marie Dubois",
-    "email": "marie.dubois@ecole-moderne.fr",
-    "phone": "+33987654321",
-    "company": "École Moderne de Paris",
-    "product": "SmartIEPP",
-    "quantity": 2,
-    "message": "Nous souhaitons une démonstration avant l'achat"
+# Test data for SMARTSAK10
+TEST_STUDENT = {
+    "matricule": "STU2024001",
+    "nom": "KOUAME",
+    "prenoms": "Aya Marie",
+    "date_naissance": "2015-03-15",
+    "lieu_naissance": "Abidjan",
+    "genre": "feminin",
+    "niveau": "primaire",
+    "classe": "CP1",
+    "nom_pere": "KOUAME Jean",
+    "nom_mere": "TRAORE Aminata",
+    "telephone_tuteur": "+225 07 12 34 56 78",
+    "adresse": "Cocody, Riviera 2"
 }
 
-TEST_TICKET = {
-    "name": "Pierre Martin",
-    "email": "pierre.martin@lycee-victor.fr",
-    "subject": "Problème de connexion à SmartIEPP",
-    "priority": "high",
-    "description": "Impossible de se connecter au logiciel depuis ce matin. Message d'erreur: 'Connexion refusée'. Nous avons besoin d'une solution rapide car c'est la période des bulletins."
+TEST_CLASSE = {
+    "nom": "CP1",
+    "niveau": "primaire",
+    "effectif_max": 35,
+    "annee_scolaire": "2024-2025"
+}
+
+TEST_MATIERE = {
+    "nom": "Mathématiques",
+    "note_sur": 20,
+    "niveau": "primaire",
+    "coefficient": 3.0
+}
+
+TEST_ENSEIGNANT = {
+    "matricule": "ENS2024001",
+    "nom": "DIABATE",
+    "prenoms": "Moussa",
+    "genre": "masculin",
+    "telephone": "+225 05 67 89 01 23",
+    "email": "moussa.diabate@smartsak10.ci",
+    "specialite": "Mathématiques",
+    "date_embauche": "2024-01-15"
 }
 
 # Global variables for test state
-auth_token = None
-download_id = None
-product_id = None
+student_id = None
+matiere_id = None
+note_id = None
+bulletin_id = None
 
 def print_test_header(test_name):
     print(f"\n{'='*60}")
