@@ -71,7 +71,7 @@ const ImportDonnees = () => {
       fetchStats();
     } catch (error) {
       console.error('Erreur:', error);
-      setMessage({ type: 'error', text: error.response?.data?.detail || 'Erreur lors de l\'importation' });
+      setMessage({ type: 'error', text: error.response?.data?.detail || "Erreur lors de l'importation" });
     } finally {
       setLoading(false);
     }
