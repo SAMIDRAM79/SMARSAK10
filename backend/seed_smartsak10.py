@@ -99,7 +99,7 @@ async def seed_database():
             "telephone": "0702030405",
             "email": "a.traore@smartsak10.edu",
             "specialite": "Mathématiques",
-            "date_embauche": date(2019, 9, 1),
+            "date_embauche": "2019-09-01",
             "statut": "actif"
         },
         {
