@@ -59,6 +59,24 @@ async def root():
         "status": "running"
     }
 
+@api_router.get("/health")
+async def health_check():
+    """Health check endpoint to verify MongoDB connection"""
+    try:
+        # Try to ping MongoDB
+        await db.command('ping')
+        return {
+            "status": "healthy",
+            "database": "connected",
+            "db_name": db.name
+        }
+    except Exception as e:
+        return {
+            "status": "unhealthy",
+            "database": "disconnected",
+            "error": str(e)
+        }
+
 # Add CORS middleware FIRST (before routes)
 app.add_middleware(
     CORSMiddleware,
