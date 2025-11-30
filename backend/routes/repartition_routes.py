@@ -46,16 +46,19 @@ async def calculer_repartition(email: str = Depends(verify_email)):
     """Calculer automatiquement la répartition des écoles dans les centres"""
     db = get_db()
     
-    # Récupérer tous les élèves actifs (candidats)
-    candidats = await db.students.find({"statut": "actif"}).to_list(10000)
+    # Récupérer tous les candidats CM2 (niveau CM2)
+    candidats = await db.candidats_cepe.find({"niveau": "CM2"}, {"_id": 0}).to_list(10000)
     
-    # Grouper par école (classe)
+    # Trier par ordre alphabétique (nom puis prénoms)
+    candidats.sort(key=lambda c: (c.get("nom", "").upper(), c.get("prenoms", "").upper()))
+    
+    # Grouper par école
     ecoles = {}
     for candidat in candidats:
-        classe = candidat.get("classe", "Inconnu")
-        if classe not in ecoles:
-            ecoles[classe] = []
-        ecoles[classe].append(candidat)
+        ecole = candidat.get("ecole", "Inconnu")
+        if ecole not in ecoles:
+            ecoles[ecole] = []
+        ecoles[ecole].append(candidat)
     
     # Récupérer les centres disponibles
     centres = await db.centres_composition.find().sort("nom", 1).to_list(1000)
