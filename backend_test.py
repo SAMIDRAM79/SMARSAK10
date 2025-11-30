@@ -134,62 +134,79 @@ def make_request(method, endpoint, data=None, headers=None, expected_status=None
         print(f"   ❌ Request error: {str(e)}")
         return None
 
-def test_products_api():
-    """Test GET /api/products"""
-    print_test_header("Products API")
+def test_students_api():
+    """Test Students API - GET /api/students"""
+    print_test_header("Students API - List Students")
     
-    response = make_request('GET', '/products')
+    response = make_request('GET', '/students')
     if not response:
-        print_result(False, "Failed to connect to products API")
+        print_result(False, "Failed to connect to students API")
         return False
     
     if response.status_code == 200:
         try:
-            products = response.json()
-            if isinstance(products, list):
-                print_result(True, f"Products API working - Found {len(products)} products")
-                if products:
-                    global product_id
-                    product_id = products[0].get('id')
-                    print(f"   Sample product: {products[0].get('name', 'Unknown')}")
+            students = response.json()
+            if isinstance(students, list):
+                print_result(True, f"Students API working - Found {len(students)} students")
                 return True
             else:
-                print_result(False, "Products API returned invalid format", "Expected list")
+                print_result(False, "Students API returned invalid format", "Expected list")
                 return False
         except json.JSONDecodeError:
-            print_result(False, "Products API returned invalid JSON")
+            print_result(False, "Students API returned invalid JSON")
             return False
     else:
-        print_result(False, f"Products API failed with status {response.status_code}", response.text)
+        print_result(False, f"Students API failed with status {response.status_code}", response.text)
         return False
 
-def test_downloads_api():
-    """Test GET /api/downloads"""
-    print_test_header("Downloads API")
+def test_students_filter_by_niveau():
+    """Test Students API with niveau filter"""
+    print_test_header("Students API - Filter by Niveau")
     
-    response = make_request('GET', '/downloads')
+    response = make_request('GET', '/students?niveau=primaire')
     if not response:
-        print_result(False, "Failed to connect to downloads API")
+        print_result(False, "Failed to connect to students API with niveau filter")
         return False
     
     if response.status_code == 200:
         try:
-            downloads = response.json()
-            if isinstance(downloads, list):
-                print_result(True, f"Downloads API working - Found {len(downloads)} downloads")
-                if downloads:
-                    global download_id
-                    download_id = downloads[0].get('id')
-                    print(f"   Sample download: {downloads[0].get('name', 'Unknown')}")
+            students = response.json()
+            if isinstance(students, list):
+                print_result(True, f"Students niveau filter working - Found {len(students)} primaire students")
                 return True
             else:
-                print_result(False, "Downloads API returned invalid format", "Expected list")
+                print_result(False, "Students niveau filter returned invalid format")
                 return False
         except json.JSONDecodeError:
-            print_result(False, "Downloads API returned invalid JSON")
+            print_result(False, "Students niveau filter returned invalid JSON")
             return False
     else:
-        print_result(False, f"Downloads API failed with status {response.status_code}", response.text)
+        print_result(False, f"Students niveau filter failed with status {response.status_code}", response.text)
+        return False
+
+def test_students_filter_by_classe():
+    """Test Students API with classe filter"""
+    print_test_header("Students API - Filter by Classe")
+    
+    response = make_request('GET', '/students?classe=CP1')
+    if not response:
+        print_result(False, "Failed to connect to students API with classe filter")
+        return False
+    
+    if response.status_code == 200:
+        try:
+            students = response.json()
+            if isinstance(students, list):
+                print_result(True, f"Students classe filter working - Found {len(students)} CP1 students")
+                return True
+            else:
+                print_result(False, "Students classe filter returned invalid format")
+                return False
+        except json.JSONDecodeError:
+            print_result(False, "Students classe filter returned invalid JSON")
+            return False
+    else:
+        print_result(False, f"Students classe filter failed with status {response.status_code}", response.text)
         return False
 
 def test_user_registration():
