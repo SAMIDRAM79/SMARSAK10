@@ -51,6 +51,12 @@ const LoginPage = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-6">
+              {error && (
+                <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+                  {error}
+                </div>
+              )}
+              
               <div>
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                   Adresse e-mail
@@ -62,7 +68,8 @@ const LoginPage = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B89C7] focus:border-transparent outline-none transition-all"
+                  disabled={loading}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B89C7] focus:border-transparent outline-none transition-all disabled:opacity-50"
                   placeholder="votre@email.com"
                 />
               </div>
@@ -79,13 +86,15 @@ const LoginPage = () => {
                     value={formData.password}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B89C7] focus:border-transparent outline-none transition-all pr-12"
+                    disabled={loading}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B89C7] focus:border-transparent outline-none transition-all pr-12 disabled:opacity-50"
                     placeholder="••••••••"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                    disabled={loading}
                   >
                     {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                   </button>
@@ -97,6 +106,7 @@ const LoginPage = () => {
                   <input
                     type="checkbox"
                     className="w-4 h-4 text-[#1B89C7] border-gray-300 rounded focus:ring-[#1B89C7]"
+                    disabled={loading}
                   />
                   <span className="ml-2 text-sm text-gray-700">Se souvenir de moi</span>
                 </label>
@@ -107,9 +117,10 @@ const LoginPage = () => {
 
               <button
                 type="submit"
-                className="w-full bg-[#1B89C7] text-white py-3 px-6 rounded-lg font-semibold hover:bg-[#1565A0] transition-colors shadow-md"
+                disabled={loading}
+                className="w-full bg-[#1B89C7] text-white py-3 px-6 rounded-lg font-semibold hover:bg-[#1565A0] transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Se connecter
+                {loading ? 'Connexion...' : 'Se connecter'}
               </button>
             </form>
 
