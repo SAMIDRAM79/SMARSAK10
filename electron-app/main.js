@@ -1,15 +1,118 @@
 const { app, BrowserWindow, Menu } = require('electron');
 const path = require('path');
 const { spawn } = require('child_process');
-const waitOn = require('wait-on');
+const http = require('http');
 
 let mainWindow;
 let backendProcess;
 let frontendProcess;
 
-const isDev = process.env.NODE_ENV === 'development';
-const BACKEND_PORT = 8001;
-const FRONTEND_PORT = 3000;
+// Chemins
+const BACKEND_PATH = path.join(__dirname, 'backend');
+const PYTHON_PATH = path.join(__dirname, 'python', 'Scripts', 'python.exe');
+const MONGO_PATH = 'C:\\Program Files\\MongoDB\\Server\\7.0\\bin\\mongod.exe';
+const FRONTEND_BUILD = path.join(__dirname, 'frontend-build');
+
+function checkPort(port, callback) {
+  const options = {
+    host: 'localhost',
+    port: port,
+    timeout: 2000
+  };
+
+  const req = http.request(options, () => {
+    callback(true);
+  });
+
+  req.on('error', () => {
+    callback(false);
+  });
+
+  req.on('timeout', () => {
+    req.destroy();
+    callback(false);
+  });
+
+  req.end();
+}
+
+function startMongoDB() {
+  console.log('Démarrage MongoDB...');
+  
+  // Vérifier si MongoDB est déjà en cours d'exécution
+  checkPort(27017, (isRunning) => {
+    if (isRunning) {
+      console.log('MongoDB déjà en cours d\'exécution');
+      startBackend();
+    } else {
+      // Démarrer MongoDB via service Windows
+      const mongoProcess = spawn('net', ['start', 'MongoDB'], { shell: true });
+      
+      mongoProcess.on('error', (error) => {
+        console.error('Erreur MongoDB:', error);
+        // Continuer quand même, l'utilisateur peut avoir MongoDB installé différemment
+        startBackend();
+      });
+
+      mongoProcess.on('close', (code) => {
+        console.log('MongoDB démarré (code:', code, ')');
+        setTimeout(() => startBackend(), 2000);
+      });
+    }
+  });
+}
+
+function startBackend() {
+  console.log('Démarrage Backend FastAPI...');
+  
+  checkPort(8001, (isRunning) => {
+    if (isRunning) {
+      console.log('Backend déjà en cours d\'exécution');
+      createWindow();
+    } else {
+      const serverPath = path.join(BACKEND_PATH, 'server.py');
+      
+      backendProcess = spawn(PYTHON_PATH, [
+        '-m', 'uvicorn',
+        'server:app',
+        '--host', '0.0.0.0',
+        '--port', '8001'
+      ], {
+        cwd: BACKEND_PATH,
+        shell: true
+      });
+
+      backendProcess.stdout.on('data', (data) => {
+        console.log(`Backend: ${data}`);
+      });
+
+      backendProcess.stderr.on('data', (data) => {
+        console.error(`Backend Error: ${data}`);
+      });
+
+      backendProcess.on('close', (code) => {
+        console.log(`Backend fermé (code: ${code})`);
+      });
+
+      // Attendre que le backend soit prêt
+      setTimeout(() => {
+        checkBackendReady();
+      }, 5000);
+    }
+  });
+}
+
+function checkBackendReady() {
+  checkPort(8001, (isReady) => {
+    if (isReady) {
+      console.log('Backend prêt !');
+      createWindow();
+    } else {
+      console.log('Attente du backend...');
+      setTimeout(() => checkBackendReady(), 2000);
+    }
+  });
+}
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -17,14 +120,16 @@ function createWindow() {
     height: 900,
     webPreferences: {
       nodeIntegration: false,
-      contextIsolation: true,
+      contextIsolation: true
     },
-    icon: path.join(__dirname, 'icon.png'),
-    title: 'SMARTSAK10 - Gestion Scolaire',
-    autoHideMenuBar: false,
+    icon: path.join(__dirname, 'logo.jpg'),
+    title: 'SMARTSAK10 - Gestion Scolaire IEPP SAKASSOU'
   });
 
-  // Créer un menu personnalisé
+  // Charger l'application React buildée
+  mainWindow.loadFile(path.join(FRONTEND_BUILD, 'index.html'));
+
+  // Menu personnalisé
   const menu = Menu.buildFromTemplate([
     {
       label: 'Fichier',
@@ -34,10 +139,26 @@ function createWindow() {
           accelerator: 'F5',
           click: () => mainWindow.reload()
         },
+        { type: 'separator' },
         {
           label: 'Quitter',
           accelerator: 'Alt+F4',
           click: () => app.quit()
+        }
+      ]
+    },
+    {
+      label: 'Affichage',
+      submenu: [
+        {
+          label: 'Plein écran',
+          accelerator: 'F11',
+          click: () => mainWindow.setFullScreen(!mainWindow.isFullScreen())
+        },
+        {
+          label: 'Outils de développement',
+          accelerator: 'F12',
+          click: () => mainWindow.webContents.openDevTools()
         }
       ]
     },
@@ -47,169 +168,35 @@ function createWindow() {
         {
           label: 'À propos',
           click: () => {
-            const aboutWindow = new BrowserWindow({
-              width: 400,
-              height: 300,
-              parent: mainWindow,
-              modal: true,
-              title: 'À propos de SMARTSAK10'
+            const { dialog } = require('electron');
+            dialog.showMessageBox(mainWindow, {
+              type: 'info',
+              title: 'À propos de SMARTSAK10',
+              message: 'SMARTSAK10\nVersion 1.0.0',
+              detail: 'Système de Management Scolaire\nIEPP SAKASSOU\nAnnée Scolaire 2024-2025'
             });
-            aboutWindow.loadURL(`data:text/html;charset=utf-8,
-              <html>
-                <body style="font-family: Arial; padding: 20px; text-align: center;">
-                  <h1>SMARTSAK10</h1>
-                  <p>Version 1.0.0</p>
-                  <p>Système de gestion scolaire complet</p>
-                  <p>Pré-primaire, Maternelle, Primaire</p>
-                  <br>
-                  <p>© 2024 SMARTSAK10</p>
-                </body>
-              </html>
-            `);
           }
         }
       ]
     }
   ]);
-  Menu.setApplicationMenu(menu);
 
-  // Charger l'application
-  if (isDev) {
-    mainWindow.loadURL(`http://localhost:${FRONTEND_PORT}`);
-    mainWindow.webContents.openDevTools();
-  } else {
-    mainWindow.loadURL(`http://localhost:${FRONTEND_PORT}`);
-  }
+  Menu.setApplicationMenu(menu);
 
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
 }
 
-function startBackend() {
-  return new Promise((resolve, reject) => {
-    console.log('Démarrage du backend...');
-    
-    const backendPath = path.join(__dirname, '..', 'backend');
-    const pythonCmd = process.platform === 'win32' ? 'python' : 'python3';
-    
-    backendProcess = spawn(pythonCmd, [
-      '-m', 'uvicorn',
-      'server:app',
-      '--host', '127.0.0.1',
-      '--port', BACKEND_PORT.toString(),
-      '--workers', '1'
-    ], {
-      cwd: backendPath,
-      env: { ...process.env }
-    });
-
-    backendProcess.stdout.on('data', (data) => {
-      console.log(`Backend: ${data}`);
-    });
-
-    backendProcess.stderr.on('data', (data) => {
-      console.error(`Backend Error: ${data}`);
-    });
-
-    backendProcess.on('error', (error) => {
-      console.error('Erreur backend:', error);
-      reject(error);
-    });
-
-    // Attendre que le backend soit prêt
-    waitOn({
-      resources: [`http://localhost:${BACKEND_PORT}/api/`],
-      timeout: 30000,
-      interval: 500
-    }).then(() => {
-      console.log('✓ Backend démarré');
-      resolve();
-    }).catch((err) => {
-      console.error('Timeout backend:', err);
-      reject(err);
-    });
-  });
-}
-
-function startFrontend() {
-  return new Promise((resolve, reject) => {
-    console.log('Démarrage du frontend...');
-    
-    const frontendPath = path.join(__dirname, '..', 'frontend');
-    const yarnCmd = process.platform === 'win32' ? 'yarn.cmd' : 'yarn';
-    
-    frontendProcess = spawn(yarnCmd, ['start'], {
-      cwd: frontendPath,
-      env: { ...process.env, BROWSER: 'none', CI: 'true' },
-      shell: true
-    });
-
-    frontendProcess.stdout.on('data', (data) => {
-      console.log(`Frontend: ${data}`);
-      if (data.includes('webpack compiled successfully') || data.includes('Compiled successfully')) {
-        resolve();
-      }
-    });
-
-    frontendProcess.stderr.on('data', (data) => {
-      console.log(`Frontend Info: ${data}`);
-    });
-
-    frontendProcess.on('error', (error) => {
-      console.error('Erreur frontend:', error);
-      reject(error);
-    });
-
-    // Timeout de secours
-    setTimeout(() => {
-      console.log('✓ Frontend démarré (timeout)');
-      resolve();
-    }, 45000);
-  });
-}
-
-async function initializeApp() {
-  try {
-    console.log('Initialisation de SMARTSAK10...');
-    
-    // Démarrer le backend
-    await startBackend();
-    
-    // Démarrer le frontend
-    await startFrontend();
-    
-    // Attendre que le frontend soit vraiment prêt
-    await waitOn({
-      resources: [`http://localhost:${FRONTEND_PORT}`],
-      timeout: 60000,
-      interval: 1000
-    });
-    
-    console.log('✓ Application prête, ouverture de la fenêtre...');
-    
-    // Créer la fenêtre
-    createWindow();
-    
-  } catch (error) {
-    console.error('Erreur lors de l\'initialisation:', error);
-    app.quit();
-  }
-}
-
 app.on('ready', () => {
-  initializeApp();
+  console.log('Application SMARTSAK10 démarrée');
+  startMongoDB();
 });
 
 app.on('window-all-closed', () => {
-  // Tuer les processus
-  if (backendProcess) {
-    backendProcess.kill();
+  if (process.platform !== 'darwin') {
+    app.quit();
   }
-  if (frontendProcess) {
-    frontendProcess.kill();
-  }
-  app.quit();
 });
 
 app.on('activate', () => {
@@ -218,9 +205,11 @@ app.on('activate', () => {
   }
 });
 
-// Gérer la fermeture propre
-process.on('SIGTERM', () => {
-  if (backendProcess) backendProcess.kill();
-  if (frontendProcess) frontendProcess.kill();
-  app.quit();
+app.on('before-quit', () => {
+  if (backendProcess) {
+    backendProcess.kill();
+  }
+  if (frontendProcess) {
+    frontendProcess.kill();
+  }
 });

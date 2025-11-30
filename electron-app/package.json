@@ -1,81 +1,52 @@
 {
   "name": "smartsak10",
   "version": "1.0.0",
-  "description": "Système de gestion scolaire complet - SMARTSAK10",
+  "description": "Système de Management Scolaire - IEPP SAKASSOU",
   "main": "main.js",
-  "author": "SMARTSAK10",
-  "license": "MIT",
   "scripts": {
-    "start": "cross-env NODE_ENV=development electron .",
-    "pack": "electron-builder --dir",
-    "dist": "electron-builder",
-    "dist:win": "electron-builder --win"
+    "start": "electron .",
+    "build:win": "electron-builder --win",
+    "build:win64": "electron-builder --win --x64"
   },
   "build": {
-    "appId": "com.smartsak10.app",
+    "appId": "com.iepp.smartsak10",
     "productName": "SMARTSAK10",
-    "directories": {
-      "output": "dist"
-    },
-    "files": [
-      "main.js",
-      "package.json",
-      "icon.png",
-      "../backend/**/*",
-      "../frontend/build/**/*",
-      "../frontend/public/**/*",
-      "../frontend/src/**/*",
-      "../frontend/package.json",
-      "../frontend/.env",
-      "!../backend/__pycache__",
-      "!../backend/*.pyc",
-      "!../backend/.env",
-      "!../backend/uploads"
-    ],
     "win": {
       "target": [
         "nsis"
       ],
-      "icon": "icon.png"
+      "icon": "logo.jpg"
     },
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "SMARTSAK10",
-      "installerIcon": "icon.png",
-      "uninstallerIcon": "icon.png"
+      "shortcutName": "SMARTSAK10"
     },
-    "extraResources": [
-      {
-        "from": "../backend",
-        "to": "backend",
-        "filter": [
-          "**/*",
-          "!__pycache__",
-          "!*.pyc",
-          "!.env",
-          "!uploads"
-        ]
-      },
-      {
-        "from": "../frontend",
-        "to": "frontend",
-        "filter": [
-          "**/*",
-          "!node_modules"
-        ]
-      }
-    ]
+    "files": [
+      "main.js",
+      "package.json",
+      "frontend-build/**/*",
+      "backend/**/*",
+      "python/**/*",
+      "logo.jpg"
+    ],
+    "directories": {
+      "output": "dist"
+    }
   },
-  "dependencies": {
-    "concurrently": "^9.2.1",
-    "cross-env": "^10.1.0",
-    "electron": "^39.2.4",
-    "wait-on": "^9.0.3"
-  },
+  "keywords": [
+    "education",
+    "school",
+    "management",
+    "cepe"
+  ],
+  "author": "IEPP SAKASSOU",
+  "license": "PROPRIETARY",
   "devDependencies": {
-    "electron-builder": "^26.0.12"
-  }
+    "electron": "^27.0.0",
+    "electron-builder": "^24.6.4"
+  },
+  "dependencies": {}
 }
