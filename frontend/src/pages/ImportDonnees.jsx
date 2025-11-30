@@ -48,7 +48,7 @@ const ImportDonnees = () => {
   const handleExcelUpload = async (e) => {
     e.preventDefault();
     if (!excelFile || !anneeScolaire) {
-      setMessage({ type: 'error', text: 'Veuillez sélectionner un fichier Excel et vérifier l\'année scolaire' });
+      setMessage({ type: 'error', text: "Veuillez sélectionner un fichier Excel et vérifier l'année scolaire" });
       return;
     }
 
