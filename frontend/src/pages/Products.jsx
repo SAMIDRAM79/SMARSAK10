@@ -1,27 +1,25 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '../components/Header';
+import { productAPI } from '../services/api';
 
 const ProductsPage = () => {
-  const products = [
-    {
-      name: 'SmartIEPP',
-      description: 'Logiciel de gestion scolaire complet pour les établissements privés',
-      features: ['Gestion des élèves', 'Notes et bulletins', 'Comptabilité', 'Emploi du temps'],
-      image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop',
-    },
-    {
-      name: 'SmartGestion',
-      description: 'Solution de gestion d\'entreprise adaptée à vos besoins',
-      features: ['Facturation', 'Stock', 'Clients', 'Rapports'],
-      image: 'https://images.unsplash.com/photo-1575388902449-6bca946ad549?w=400&h=300&fit=crop',
-    },
-    {
-      name: 'SmartCompta',
-      description: 'Logiciel de comptabilité moderne et intuitif',
-      features: ['Bilan', 'Journal', 'Grand livre', 'Déclarations'],
-      image: 'https://images.unsplash.com/photo-1631006732121-a6da2f4864d3?w=400&h=300&fit=crop',
-    },
-  ];
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const response = await productAPI.getProducts();
+      setProducts(response.data);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
