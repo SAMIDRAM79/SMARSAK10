@@ -20,7 +20,8 @@ from routes import (
     import_routes,
     centres_routes,
     secteurs_routes,
-    resultats_routes
+    resultats_routes,
+    cartes_routes
 )
 from routes import repartition_routes
 
