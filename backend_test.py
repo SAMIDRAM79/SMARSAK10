@@ -98,13 +98,20 @@ def make_request(method, endpoint, data=None, headers=None, expected_status=None
     """Make HTTP request and return response with error handling"""
     url = f"{API_BASE}{endpoint}"
     
+    # Use global headers with X-User-Email
+    request_headers = HEADERS.copy()
+    if headers:
+        request_headers.update(headers)
+    
     try:
         if method.upper() == 'GET':
-            response = requests.get(url, headers=headers, timeout=30)
+            response = requests.get(url, headers=request_headers, timeout=30)
         elif method.upper() == 'POST':
-            response = requests.post(url, json=data, headers=headers, timeout=30)
-        elif method.upper() == 'PATCH':
-            response = requests.patch(url, json=data, headers=headers, timeout=30)
+            response = requests.post(url, json=data, headers=request_headers, timeout=30)
+        elif method.upper() == 'PUT':
+            response = requests.put(url, json=data, headers=request_headers, timeout=30)
+        elif method.upper() == 'DELETE':
+            response = requests.delete(url, headers=request_headers, timeout=30)
         else:
             raise ValueError(f"Unsupported HTTP method: {method}")
         
