@@ -14,8 +14,12 @@ from routes import (
     note_routes,
     bulletin_routes,
     stats_routes,
-    enseignant_routes
+    enseignant_routes,
+    parametres_routes,
+    import_routes,
+    centres_routes
 )
+from routes import repartition_routes
 
 
 ROOT_DIR = Path(__file__).parent
