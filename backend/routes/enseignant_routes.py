@@ -5,6 +5,7 @@ from utils import serialize_doc
 from auth_middleware import verify_email
 from typing import List
 from bson import ObjectId
+from datetime import date
 
 router = APIRouter(prefix="/enseignants", tags=["enseignants"])
 
