@@ -100,15 +100,21 @@ def dessiner_carte(c, x, y, largeur, hauteur, candidat, modele, logo_path=None):
         except:
             pass
     
-    # Titre
-    c.setFillColor(HexColor(couleurs["titre"]))
-    c.setFont("Helvetica-Bold", 10)
-    c.drawCentredString(x + largeur/2, y + hauteur - 8*mm, "CARTE SCOLAIRE")
+    # Bannière colorée en haut
+    c.setFillColor(HexColor(couleurs["bordure"]))
+    c.rect(x + 18*mm, y + hauteur - 10*mm, largeur - 36*mm, 8*mm, fill=1, stroke=0)
     
-    # Année scolaire
-    c.setFont("Helvetica", 7)
-    c.setFillColor(HexColor(couleurs["texte"]))
-    c.drawCentredString(x + largeur/2, y + hauteur - 12*mm, candidat.get("annee_scolaire", "2024-2025"))
+    # Titre
+    c.setFillColor(HexColor("#FFFFFF"))  # Blanc sur fond coloré
+    c.setFont("Helvetica-Bold", 11)
+    c.drawCentredString(x + largeur/2, y + hauteur - 7.5*mm, "CARTE SCOLAIRE")
+    
+    # Année scolaire avec fond accent
+    c.setFillColor(HexColor(couleurs.get("accent", couleurs["bordure"])))
+    c.rect(x + largeur/2 - 18*mm, y + hauteur - 13.5*mm, 36*mm, 4*mm, fill=1, stroke=0)
+    c.setFont("Helvetica-Bold", 7)
+    c.setFillColor(HexColor("#FFFFFF"))
+    c.drawCentredString(x + largeur/2, y + hauteur - 11.5*mm, candidat.get("annee_scolaire", "2024-2025"))
     
     # Photo du candidat (si disponible)
     photo_url = candidat.get("photo_url")
