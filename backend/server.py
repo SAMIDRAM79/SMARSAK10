@@ -18,7 +18,9 @@ from routes import (
     enseignant_routes,
     parametres_routes,
     import_routes,
-    centres_routes
+    centres_routes,
+    secteurs_routes,
+    resultats_routes
 )
 from routes import repartition_routes
 
