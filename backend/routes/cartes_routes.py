@@ -68,28 +68,35 @@ def dessiner_carte(c, x, y, largeur, hauteur, candidat, modele, logo_path=None):
     else:
         c.setStrokeColor(HexColor(couleurs["bordure"]))
     
-    c.setLineWidth(1.5)
+    c.setLineWidth(2)  # Bordure plus épaisse
     c.rect(x, y, largeur, hauteur, fill=0, stroke=1)
     
-    # Logo en filigrane pour certains modèles
-    if modele in ["logo_blanc", "logo_couleur"] and logo_path and os.path.exists(logo_path):
+    # LOGO EN FILIGRANE AU CENTRE - POUR TOUS LES MODÈLES
+    if logo_path and os.path.exists(logo_path):
         try:
             # Dessiner le logo en filigrane au centre
-            logo_size = 30*mm
+            logo_size = 35*mm
             logo_x = x + (largeur - logo_size) / 2
             logo_y = y + (hauteur - logo_size) / 2
             c.saveState()
-            c.setFillAlpha(0.1)  # Très transparent
+            # Transparence selon le modèle
+            if modele == "logo_couleur":
+                c.setFillAlpha(0.15)  # Plus visible sur fond jaune
+            elif modele == "drapeau_ivoirien":
+                c.setFillAlpha(0.12)
+            else:
+                c.setFillAlpha(0.08)  # Très transparent pour fond blanc
             c.drawImage(logo_path, logo_x, logo_y, width=logo_size, height=logo_size, mask='auto')
             c.restoreState()
         except:
             pass
     
-    # En-tête avec logo petit
+    # En-tête avec logo petit - POUR TOUS LES MODÈLES
     if logo_path and os.path.exists(logo_path):
         try:
-            logo_size = 12*mm
-            c.drawImage(logo_path, x + 5*mm, y + hauteur - 15*mm, width=logo_size, height=logo_size, mask='auto')
+            logo_size = 14*mm
+            # Petit logo en haut à gauche
+            c.drawImage(logo_path, x + 5*mm, y + hauteur - 16*mm, width=logo_size, height=logo_size, mask='auto')
         except:
             pass
     
