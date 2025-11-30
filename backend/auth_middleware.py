@@ -1,8 +1,9 @@
 from fastapi import HTTPException, status, Header
 from typing import Optional
+import os
 
 # Email autorisé pour l'accès à l'application
-AUTHORIZED_EMAIL = "konatdra@gmail.com"
+AUTHORIZED_EMAIL = os.environ.get('AUTHORIZED_EMAIL', 'konatdra@gmail.com')
 
 async def verify_email(x_user_email: Optional[str] = Header(None)):
     """Vérifie que l'email de l'utilisateur est autorisé"""
