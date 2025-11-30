@@ -87,50 +87,55 @@ const DownloadPage = () => {
           <div className="bg-gradient-to-br from-[#1B89C7] to-[#1565A0] rounded-xl shadow-2xl p-8 text-white">
             <h2 className="text-2xl font-bold mb-6">Infos dernière version</h2>
             
-            <div className="space-y-4 mb-8">
-              <div className="flex items-center space-x-3">
-                <span className="text-3xl">⚙️</span>
-                <div>
-                  <p className="text-sm opacity-90">Version</p>
-                  <p className="text-xl font-semibold">v.25.11.25</p>
-                </div>
+            {loading ? (
+              <div className="text-center py-8">
+                <p>Chargement...</p>
               </div>
-              
-              <div className="flex items-center space-x-3">
-                <span className="text-3xl">📅</span>
-                <div>
-                  <p className="text-sm opacity-90">Date de sortie</p>
-                  <p className="text-xl font-semibold">25/11/2025</p>
+            ) : (
+              <>
+                <div className="space-y-4 mb-8">
+                  <div className="flex items-center space-x-3">
+                    <span className="text-3xl">⚙️</span>
+                    <div>
+                      <p className="text-sm opacity-90">Version</p>
+                      <p className="text-xl font-semibold">
+                        {downloads.find(d => d.type === 'kit_complet')?.version || 'v.25.11.25'}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-3">
+                    <span className="text-3xl">📅</span>
+                    <div>
+                      <p className="text-sm opacity-90">Date de sortie</p>
+                      <p className="text-xl font-semibold">25/11/2025</p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
 
-            {/* Download Buttons */}
-            <div className="space-y-3">
-              <button
-                onClick={() => handleDownload('Kit complet')}
-                className="w-full bg-white text-[#1B89C7] py-3 px-6 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center justify-center space-x-2 shadow-md"
-              >
-                <Download className="w-5 h-5" />
-                <span>Kit complet (435 Mo)</span>
-              </button>
-
-              <button
-                onClick={() => handleDownload('Mise à jour')}
-                className="w-full bg-white text-[#FF9800] py-3 px-6 rounded-lg font-semibold hover:bg-gray-100 transition-colors flex items-center justify-center space-x-2 shadow-md"
-              >
-                <Download className="w-5 h-5" />
-                <span>Mise à jour (436 Mo)</span>
-              </button>
-
-              <button
-                onClick={() => handleDownload('Ancienne version')}
-                className="w-full bg-white bg-opacity-20 text-white py-3 px-6 rounded-lg font-semibold hover:bg-opacity-30 transition-colors flex items-center justify-center space-x-2 border border-white"
-              >
-                <Download className="w-5 h-5" />
-                <span>Ancienne version</span>
-              </button>
-            </div>
+                {/* Download Buttons */}
+                <div className="space-y-3">
+                  {downloads.map((download, index) => {
+                    const buttonStyles = {
+                      kit_complet: 'bg-white text-[#1B89C7] hover:bg-gray-100',
+                      mise_a_jour: 'bg-white text-[#FF9800] hover:bg-gray-100',
+                      ancienne_version: 'bg-white bg-opacity-20 text-white hover:bg-opacity-30 border border-white'
+                    };
+                    
+                    return (
+                      <button
+                        key={download.id}
+                        onClick={() => handleDownload(download.id, download.name)}
+                        className={`w-full py-3 px-6 rounded-lg font-semibold transition-colors flex items-center justify-center space-x-2 shadow-md ${buttonStyles[download.type]}`}
+                      >
+                        <Download className="w-5 h-5" />
+                        <span>{download.name} ({download.size})</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </>
+            )}
           </div>
         </div>
 
