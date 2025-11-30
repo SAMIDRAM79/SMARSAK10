@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Header from '../components/Header';
+import { orderAPI } from '../services/api';
 
 const OrderPage = () => {
   const [formData, setFormData] = useState({
@@ -11,11 +12,36 @@ const OrderPage = () => {
     quantity: 1,
     message: '',
   });
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState('');
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Cette fonction sera connectée au backend plus tard
-    alert('Votre commande a été enregistrée! Nous vous contacterons bientôt.');
+    setLoading(true);
+    setError('');
+    setSuccess('');
+    
+    try {
+      const response = await orderAPI.createOrder(formData);
+      setSuccess(`Commande créée avec succès! Numéro de commande: ${response.data.order_number}`);
+      
+      // Reset form
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        company: '',
+        product: 'SmartIEPP',
+        quantity: 1,
+        message: '',
+      });
+    } catch (err) {
+      setError('Erreur lors de la création de la commande. Veuillez réessayer.');
+      console.error('Order error:', err);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e) => {
