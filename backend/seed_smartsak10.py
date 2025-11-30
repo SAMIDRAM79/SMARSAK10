@@ -121,7 +121,7 @@ async def seed_database():
             "telephone": "0704050607",
             "email": "am.yao@smartsak10.edu",
             "specialite": "Maternelle",
-            "date_embauche": date(2018, 9, 1),
+            "date_embauche": "2018-09-01",
             "statut": "actif"
         }
     ]
