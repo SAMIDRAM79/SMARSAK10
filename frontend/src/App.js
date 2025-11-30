@@ -5,7 +5,7 @@ import Layout from './components/Layout';
 import Dashboard from './pages/Dashboard';
 import Parametres from './pages/Parametres';
 import ImportDonnees from './pages/ImportDonnees';
-import Repartition from './pages/Repartition';
+import RepartitionCEPE from './pages/RepartitionCEPE';
 import CartesGeneration from './pages/CartesGeneration';
 import Students from './pages/Students';
 import Classes from './pages/Classes';
