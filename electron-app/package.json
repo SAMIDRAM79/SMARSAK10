@@ -1,13 +1,81 @@
 {
-  "name": "electron-app",
+  "name": "smartsak10",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "Système de gestion scolaire complet - SMARTSAK10",
+  "main": "main.js",
+  "author": "SMARTSAK10",
   "license": "MIT",
+  "scripts": {
+    "start": "cross-env NODE_ENV=development electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "dist:win": "electron-builder --win"
+  },
+  "build": {
+    "appId": "com.smartsak10.app",
+    "productName": "SMARTSAK10",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "package.json",
+      "icon.png",
+      "../backend/**/*",
+      "../frontend/build/**/*",
+      "../frontend/public/**/*",
+      "../frontend/src/**/*",
+      "../frontend/package.json",
+      "../frontend/.env",
+      "!../backend/__pycache__",
+      "!../backend/*.pyc",
+      "!../backend/.env",
+      "!../backend/uploads"
+    ],
+    "win": {
+      "target": [
+        "nsis"
+      ],
+      "icon": "icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "SMARTSAK10",
+      "installerIcon": "icon.png",
+      "uninstallerIcon": "icon.png"
+    },
+    "extraResources": [
+      {
+        "from": "../backend",
+        "to": "backend",
+        "filter": [
+          "**/*",
+          "!__pycache__",
+          "!*.pyc",
+          "!.env",
+          "!uploads"
+        ]
+      },
+      {
+        "from": "../frontend",
+        "to": "frontend",
+        "filter": [
+          "**/*",
+          "!node_modules"
+        ]
+      }
+    ]
+  },
   "dependencies": {
     "concurrently": "^9.2.1",
     "cross-env": "^10.1.0",
     "electron": "^39.2.4",
-    "electron-builder": "^26.0.12",
     "wait-on": "^9.0.3"
+  },
+  "devDependencies": {
+    "electron-builder": "^26.0.12"
   }
 }
