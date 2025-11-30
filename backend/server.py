@@ -48,10 +48,15 @@ class StatusCheck(BaseModel):
 class StatusCheckCreate(BaseModel):
     client_name: str
 
-# Add your routes to the router instead of directly to app
+# Add root endpoint
 @api_router.get("/")
 async def root():
-    return {"message": "SmartScool API is running"}
+    return {
+        "application": "SMARTSAK10",
+        "version": "1.0.0",
+        "description": "Système de gestion scolaire complet",
+        "status": "running"
+    }
 
 @api_router.post("/status", response_model=StatusCheck)
 async def create_status_check(input: StatusCheckCreate):
