@@ -28,6 +28,7 @@ function App() {
             <Route path="/parametres" element={<Parametres />} />
             <Route path="/import" element={<ImportDonnees />} />
             <Route path="/repartition" element={<Repartition />} />
+            <Route path="/cartes-generation" element={<CartesGeneration />} />
             <Route path="/students" element={<Students />} />
             <Route path="/classes" element={<Classes />} />
             <Route path="/notes" element={<Notes />} />
