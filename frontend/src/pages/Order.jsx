@@ -192,9 +192,10 @@ const OrderPage = () => {
 
             <button
               type="submit"
-              className="w-full bg-[#1B89C7] text-white py-3 px-6 rounded-lg font-semibold hover:bg-[#1565A0] transition-colors shadow-md"
+              disabled={loading}
+              className="w-full bg-[#1B89C7] text-white py-3 px-6 rounded-lg font-semibold hover:bg-[#1565A0] transition-colors shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Envoyer la commande
+              {loading ? 'Envoi en cours...' : 'Envoyer la commande'}
             </button>
           </form>
         </div>
