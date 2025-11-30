@@ -24,6 +24,9 @@ async def create_student(student: StudentCreate, email: str = Depends(verify_ema
     
     # Créer l'élève
     student_dict = student.model_dump()
+    # Convert date to string for MongoDB compatibility
+    if isinstance(student_dict.get("date_naissance"), date):
+        student_dict["date_naissance"] = student_dict["date_naissance"].isoformat()
     student_dict["annee_scolaire"] = "2024-2025"
     student_dict["date_inscription"] = datetime.utcnow()
     student_dict["statut"] = "actif"
