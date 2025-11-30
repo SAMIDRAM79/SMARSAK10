@@ -11,8 +11,9 @@ async def get_dashboard_stats(email: str = Depends(verify_email)):
     db = get_db()
     annee_scolaire = "2024-2025"
     
-    # Effectifs par niveau
-    total_students = await db.students.count_documents({"statut": "actif"})
+    try:
+        # Effectifs par niveau
+        total_students = await db.students.count_documents({"statut": "actif"})
     total_pre_primaire = await db.students.count_documents({"niveau": "pre_primaire", "statut": "actif"})
     total_maternelle = await db.students.count_documents({"niveau": "maternelle", "statut": "actif"})
     total_primaire = await db.students.count_documents({"niveau": "primaire", "statut": "actif"})
