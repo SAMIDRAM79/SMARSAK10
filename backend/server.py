@@ -107,6 +107,11 @@ api_router.include_router(repartition_routes.router)
 # Include the router in the main app
 app.include_router(api_router)
 
+# Servir les fichiers statiques (photos)
+UPLOAD_DIR = Path("/app/backend/uploads")
+UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+app.mount("/uploads", StaticFiles(directory=str(UPLOAD_DIR)), name="uploads")
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
