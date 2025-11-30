@@ -209,98 +209,85 @@ def test_students_filter_by_classe():
         print_result(False, f"Students classe filter failed with status {response.status_code}", response.text)
         return False
 
-def test_user_registration():
-    """Test POST /api/auth/register"""
-    print_test_header("User Registration")
+def test_create_student():
+    """Test POST /api/students - Create Student"""
+    print_test_header("Students API - Create Student")
     
-    response = make_request('POST', '/auth/register', TEST_USER)
+    response = make_request('POST', '/students', TEST_STUDENT)
     if not response:
-        print_result(False, "Failed to connect to registration API")
+        print_result(False, "Failed to connect to create student API")
         return False
     
     if response.status_code == 200:
         try:
             result = response.json()
-            if 'token' in result and 'email' in result:
-                global auth_token
-                auth_token = result['token']
-                print_result(True, f"User registration successful - User: {result.get('name')}")
+            if 'id' in result and 'message' in result:
+                global student_id
+                student_id = result['id']
+                print_result(True, f"Student creation successful - ID: {student_id}")
                 return True
             else:
-                print_result(False, "Registration response missing required fields", str(result))
+                print_result(False, "Student creation response missing required fields", str(result))
                 return False
         except json.JSONDecodeError:
-            print_result(False, "Registration API returned invalid JSON")
+            print_result(False, "Student creation API returned invalid JSON")
             return False
     elif response.status_code == 400:
-        # User might already exist, try to continue with login
-        print_result(True, "User already exists (expected for repeated tests)")
+        # Student might already exist
+        print_result(True, "Student already exists (expected for repeated tests)")
         return True
     else:
-        print_result(False, f"Registration failed with status {response.status_code}", response.text)
+        print_result(False, f"Student creation failed with status {response.status_code}", response.text)
         return False
 
-def test_user_login():
-    """Test POST /api/auth/login"""
-    print_test_header("User Login")
+def test_classes_api():
+    """Test GET /api/classes"""
+    print_test_header("Classes API - List Classes")
     
-    login_data = {
-        "email": TEST_USER["email"],
-        "password": TEST_USER["password"]
-    }
-    
-    response = make_request('POST', '/auth/login', login_data)
+    response = make_request('GET', '/classes')
     if not response:
-        print_result(False, "Failed to connect to login API")
+        print_result(False, "Failed to connect to classes API")
         return False
     
     if response.status_code == 200:
         try:
-            result = response.json()
-            if 'token' in result and 'email' in result:
-                global auth_token
-                auth_token = result['token']
-                print_result(True, f"User login successful - User: {result.get('name')}")
+            classes = response.json()
+            if isinstance(classes, list):
+                print_result(True, f"Classes API working - Found {len(classes)} classes")
                 return True
             else:
-                print_result(False, "Login response missing required fields", str(result))
+                print_result(False, "Classes API returned invalid format", "Expected list")
                 return False
         except json.JSONDecodeError:
-            print_result(False, "Login API returned invalid JSON")
+            print_result(False, "Classes API returned invalid JSON")
             return False
     else:
-        print_result(False, f"Login failed with status {response.status_code}", response.text)
+        print_result(False, f"Classes API failed with status {response.status_code}", response.text)
         return False
 
-def test_authenticated_route():
-    """Test GET /api/auth/me with authentication"""
-    print_test_header("Authenticated Route (/auth/me)")
+def test_classes_filter_by_niveau():
+    """Test Classes API with niveau filter"""
+    print_test_header("Classes API - Filter by Niveau")
     
-    if not auth_token:
-        print_result(False, "No auth token available - skipping authenticated test")
-        return False
-    
-    headers = {"Authorization": f"Bearer {auth_token}"}
-    response = make_request('GET', '/auth/me', headers=headers)
-    
+    response = make_request('GET', '/classes?niveau=primaire')
     if not response:
-        print_result(False, "Failed to connect to /auth/me API")
+        print_result(False, "Failed to connect to classes API with niveau filter")
         return False
     
     if response.status_code == 200:
         try:
-            result = response.json()
-            if 'email' in result and 'name' in result:
-                print_result(True, f"Authenticated route working - User: {result.get('name')}")
+            classes = response.json()
+            if isinstance(classes, list):
+                print_result(True, f"Classes niveau filter working - Found {len(classes)} primaire classes")
                 return True
             else:
-                print_result(False, "Auth/me response missing required fields", str(result))
+                print_result(False, "Classes niveau filter returned invalid format")
                 return False
         except json.JSONDecodeError:
-            print_result(False, "Auth/me API returned invalid JSON")
+            print_result(False, "Classes niveau filter returned invalid JSON")
             return False
     else:
-        print_result(False, f"Auth/me failed with status {response.status_code}", response.text)
+        print_result(False, f"Classes niveau filter failed with status {response.status_code}", response.text)
         return False
 
 def test_order_creation():
