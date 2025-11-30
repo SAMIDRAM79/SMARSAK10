@@ -11,7 +11,15 @@ import uuid
 from datetime import datetime, timezone
 
 # Import routes
-from routes import auth_routes, download_routes, product_routes, order_routes, ticket_routes
+from routes import (
+    student_routes,
+    classe_routes,
+    matiere_routes,
+    note_routes,
+    bulletin_routes,
+    stats_routes,
+    enseignant_routes
+)
 
 
 ROOT_DIR = Path(__file__).parent
