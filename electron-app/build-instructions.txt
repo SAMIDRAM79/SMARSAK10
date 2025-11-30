@@ -1,0 +1,159 @@
+═══════════════════════════════════════════════════════════════
+  SMARTSAK10 - INSTRUCTIONS DE BUILD POUR WINDOWS
+═══════════════════════════════════════════════════════════════
+
+📋 ÉTAPE 1 : PRÉREQUIS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Avant de construire l'application, assurez-vous d'avoir :
+
+1. Python 3.11 ou supérieur
+   Télécharger : https://www.python.org/downloads/
+   Vérifier : python --version
+
+2. Node.js 16 ou supérieur
+   Télécharger : https://nodejs.org/
+   Vérifier : node --version
+
+3. Yarn (gestionnaire de packages)
+   Installer : npm install -g yarn
+   Vérifier : yarn --version
+
+4. MongoDB (local ou distant)
+   Télécharger : https://www.mongodb.com/try/download/community
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📦 ÉTAPE 2 : PRÉPARER L'APPLICATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Ouvrir un terminal (CMD ou PowerShell)
+
+2. Naviguer vers le dossier electron-app :
+   cd C:\chemin\vers\app\electron-app
+
+3. Installer les dépendances Python backend :
+   cd ../backend
+   pip install -r requirements.txt
+
+4. Installer les dépendances Node.js frontend :
+   cd ../frontend
+   yarn install
+
+5. Installer les dépendances Electron :
+   cd ../electron-app
+   yarn install
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔨 ÉTAPE 3 : CONSTRUIRE L'EXÉCUTABLE .EXE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DEPUIS LE DOSSIER /app/electron-app, exécuter :
+
+# Build complet avec installateur NSIS
+yarn dist:win
+
+OU
+
+# Build sans compression (plus rapide pour tester)
+yarn pack
+
+⏱️  Temps estimé : 5-10 minutes
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📂 ÉTAPE 4 : RÉCUPÉRER LES FICHIERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Après le build, vous trouverez dans /app/electron-app/dist/ :
+
+1. SMARTSAK10 Setup 1.0.0.exe (≈ 150-200 MB)
+   → Fichier d'installation pour les utilisateurs
+   → Double-clic pour installer sur n'importe quel PC Windows
+
+2. Dossier win-unpacked/ (≈ 300-400 MB)
+   → Version portable sans installation
+   → Contient SMARTSAK10.exe à lancer directement
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ ÉTAPE 5 : TESTER L'APPLICATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+# Option 1 : Test en mode développement (sans build)
+cd /app/electron-app
+yarn start
+
+# Option 2 : Test du .exe
+1. Aller dans dist/win-unpacked/
+2. Double-cliquer sur SMARTSAK10.exe
+3. Attendre 30-60 secondes (premier lancement)
+4. L'application devrait s'ouvrir automatiquement
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚀 ÉTAPE 6 : DISTRIBUER L'APPLICATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Pour distribuer à vos utilisateurs :
+
+1. Partagez le fichier : SMARTSAK10 Setup 1.0.0.exe
+
+2. Instructions pour l'utilisateur :
+   - Double-cliquer sur le fichier .exe
+   - Suivre l'assistant d'installation
+   - Lancer SMARTSAK10 depuis le bureau
+   - Email de connexion : konatdra@gmail.com
+
+3. Prérequis utilisateur (IMPORTANT) :
+   - Windows 7 ou supérieur (64-bit)
+   - 4 GB RAM minimum
+   - 1 GB d'espace disque libre
+   - MongoDB installé (local ou accès distant)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚠️  NOTES IMPORTANTES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Le build DOIT être fait sur Windows pour créer un .exe Windows
+
+2. La première ouverture prend du temps (30-60 sec)
+   → Le backend et frontend doivent démarrer
+
+3. MongoDB doit être accessible
+   → Installer MongoDB Community : https://www.mongodb.com/try/download/community
+   → Ou utiliser MongoDB Atlas (cloud)
+
+4. Pour changer la base de données :
+   → Éditer : /app/backend/.env
+   → Modifier : MONGO_URL=votre_url_mongodb
+
+5. L'application écoute sur :
+   → Backend : http://localhost:8001
+   → Frontend : http://localhost:3000
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🐛 DÉPANNAGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Problème : "Python n'est pas reconnu"
+Solution : Installer Python et l'ajouter au PATH
+
+Problème : "Node n'est pas reconnu"
+Solution : Installer Node.js et redémarrer le terminal
+
+Problème : "Le build échoue"
+Solution : 
+  1. Supprimer node_modules : rm -rf node_modules
+  2. Réinstaller : yarn install
+  3. Retry : yarn dist:win
+
+Problème : "L'application ne démarre pas"
+Solution :
+  1. Vérifier que MongoDB est démarré
+  2. Vérifier les ports 8001 et 3000 sont libres
+  3. Regarder les logs dans : %APPDATA%/smartsak10/
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📞 SUPPORT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Email : konatdra@gmail.com
+
+═══════════════════════════════════════════════════════════════
