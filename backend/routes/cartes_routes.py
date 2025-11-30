@@ -14,32 +14,36 @@ from pathlib import Path
 
 router = APIRouter(prefix="/cartes", tags=["cartes"])
 
-# Couleurs des modèles
+# Couleurs des modèles - COULEURS VIVES
 MODELES_COULEURS = {
     "standard": {
         "fond": "#FFFFFF",
-        "bordure": "#1B89C7",
-        "titre": "#1B89C7",
-        "texte": "#2C3E50"
+        "bordure": "#0066CC",  # Bleu vif
+        "titre": "#0066CC",
+        "texte": "#1A1A1A",
+        "accent": "#00CC66"  # Vert vif
     },
     "logo_blanc": {
         "fond": "#FFFFFF",
-        "bordure": "#CCCCCC",
-        "titre": "#2C3E50",
-        "texte": "#34495E"
+        "bordure": "#9C27B0",  # Violet vif
+        "titre": "#6A1B9A",
+        "texte": "#2C2C2C",
+        "accent": "#AB47BC"
     },
     "logo_couleur": {
-        "fond": "#E3F2FD",
-        "bordure": "#1B89C7",
-        "titre": "#0D47A1",
-        "texte": "#1565C0"
+        "fond": "#FFF9C4",  # Jaune clair vif
+        "bordure": "#FF6F00",  # Orange vif
+        "titre": "#E65100",
+        "texte": "#BF360C",
+        "accent": "#FFB300"
     },
     "drapeau_ivoirien": {
         "fond": "#FFFFFF",
-        "bordure_gauche": "#009E60",  # Vert
-        "bordure_droite": "#FF9E00",  # Orange
-        "titre": "#2C3E50",
-        "texte": "#34495E"
+        "bordure_gauche": "#00A86B",  # Vert émeraude vif
+        "bordure_droite": "#FF8C00",  # Orange vif
+        "titre": "#1A5E1A",
+        "texte": "#2C2C2C",
+        "accent": "#FFFFFF"
     }
 }
 
