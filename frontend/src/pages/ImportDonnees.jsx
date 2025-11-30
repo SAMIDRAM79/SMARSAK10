@@ -135,7 +135,7 @@ const ImportDonnees = () => {
       }
     } catch (error) {
       console.error('Erreur:', error);
-      setMessage({ type: 'error', text: 'Erreur lors de l\'épuration' });
+      setMessage({ type: 'error', text: "Erreur lors de l'épuration" });
     } finally {
       setLoading(false);
     }
