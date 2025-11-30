@@ -385,20 +385,195 @@ def test_create_note():
         print_result(False, f"Note creation failed with status {response.status_code}", response.text)
         return False
 
+def test_get_student_notes():
+    """Test GET /api/notes/student/{student_id}"""
+    print_test_header("Notes API - Get Student Notes")
+    
+    if not student_id:
+        print_result(False, "No student_id available - skipping student notes test")
+        return False
+    
+    response = make_request('GET', f'/notes/student/{student_id}')
+    if not response:
+        print_result(False, "Failed to connect to student notes API")
+        return False
+    
+    if response.status_code == 200:
+        try:
+            notes = response.json()
+            if isinstance(notes, list):
+                print_result(True, f"Student notes API working - Found {len(notes)} notes")
+                return True
+            else:
+                print_result(False, "Student notes API returned invalid format")
+                return False
+        except json.JSONDecodeError:
+            print_result(False, "Student notes API returned invalid JSON")
+            return False
+    else:
+        print_result(False, f"Student notes API failed with status {response.status_code}", response.text)
+        return False
+
+def test_get_classe_notes():
+    """Test GET /api/notes/classe/{classe}"""
+    print_test_header("Notes API - Get Class Notes")
+    
+    response = make_request('GET', '/notes/classe/CP1')
+    if not response:
+        print_result(False, "Failed to connect to class notes API")
+        return False
+    
+    if response.status_code == 200:
+        try:
+            notes = response.json()
+            if isinstance(notes, list):
+                print_result(True, f"Class notes API working - Found {len(notes)} notes")
+                return True
+            else:
+                print_result(False, "Class notes API returned invalid format")
+                return False
+        except json.JSONDecodeError:
+            print_result(False, "Class notes API returned invalid JSON")
+            return False
+    else:
+        print_result(False, f"Class notes API failed with status {response.status_code}", response.text)
+        return False
+
+def test_generate_bulletin():
+    """Test POST /api/bulletins/generate"""
+    print_test_header("Bulletins API - Generate Bulletin")
+    
+    if not student_id:
+        print_result(False, "No student_id available - skipping bulletin generation")
+        return False
+    
+    response = make_request('POST', f'/bulletins/generate?student_id={student_id}&periode=trimestre_1&annee_scolaire=2024-2025')
+    if not response:
+        print_result(False, "Failed to connect to bulletin generation API")
+        return False
+    
+    if response.status_code == 200:
+        try:
+            result = response.json()
+            if 'id' in result and 'moyenne' in result:
+                global bulletin_id
+                bulletin_id = result['id']
+                print_result(True, f"Bulletin generation successful - Average: {result.get('moyenne')}")
+                return True
+            else:
+                print_result(False, "Bulletin generation response missing required fields", str(result))
+                return False
+        except json.JSONDecodeError:
+            print_result(False, "Bulletin generation API returned invalid JSON")
+            return False
+    elif response.status_code == 400:
+        # No notes found for the period
+        print_result(True, "No notes found for bulletin generation (expected for new student)")
+        return True
+    else:
+        print_result(False, f"Bulletin generation failed with status {response.status_code}", response.text)
+        return False
+
+def test_get_student_bulletins():
+    """Test GET /api/bulletins/student/{student_id}"""
+    print_test_header("Bulletins API - Get Student Bulletins")
+    
+    if not student_id:
+        print_result(False, "No student_id available - skipping student bulletins test")
+        return False
+    
+    response = make_request('GET', f'/bulletins/student/{student_id}')
+    if not response:
+        print_result(False, "Failed to connect to student bulletins API")
+        return False
+    
+    if response.status_code == 200:
+        try:
+            bulletins = response.json()
+            if isinstance(bulletins, list):
+                print_result(True, f"Student bulletins API working - Found {len(bulletins)} bulletins")
+                return True
+            else:
+                print_result(False, "Student bulletins API returned invalid format")
+                return False
+        except json.JSONDecodeError:
+            print_result(False, "Student bulletins API returned invalid JSON")
+            return False
+    else:
+        print_result(False, f"Student bulletins API failed with status {response.status_code}", response.text)
+        return False
+
+def test_enseignants_api():
+    """Test GET /api/enseignants"""
+    print_test_header("Enseignants API - List Teachers")
+    
+    response = make_request('GET', '/enseignants')
+    if not response:
+        print_result(False, "Failed to connect to enseignants API")
+        return False
+    
+    if response.status_code == 200:
+        try:
+            enseignants = response.json()
+            if isinstance(enseignants, list):
+                print_result(True, f"Enseignants API working - Found {len(enseignants)} teachers")
+                return True
+            else:
+                print_result(False, "Enseignants API returned invalid format", "Expected list")
+                return False
+        except json.JSONDecodeError:
+            print_result(False, "Enseignants API returned invalid JSON")
+            return False
+    else:
+        print_result(False, f"Enseignants API failed with status {response.status_code}", response.text)
+        return False
+
+def test_statistics_dashboard():
+    """Test GET /api/statistics/dashboard"""
+    print_test_header("Statistics API - Dashboard")
+    
+    response = make_request('GET', '/statistics/dashboard')
+    if not response:
+        print_result(False, "Failed to connect to statistics dashboard API")
+        return False
+    
+    if response.status_code == 200:
+        try:
+            stats = response.json()
+            if 'effectifs' in stats and 'classes' in stats:
+                print_result(True, f"Statistics dashboard API working - Total students: {stats['effectifs']['total']}")
+                return True
+            else:
+                print_result(False, "Statistics dashboard response missing required fields", str(stats))
+                return False
+        except json.JSONDecodeError:
+            print_result(False, "Statistics dashboard API returned invalid JSON")
+            return False
+    else:
+        print_result(False, f"Statistics dashboard API failed with status {response.status_code}", response.text)
+        return False
+
 def run_all_tests():
-    """Run all backend API tests in the specified order"""
-    print(f"\n🚀 Starting SmartScool Backend API Tests")
+    """Run all SMARTSAK10 backend API tests in the specified order"""
+    print(f"\n🚀 Starting SMARTSAK10 Backend API Tests")
     print(f"📅 Test started at: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     
     tests = [
-        ("Products Listing", test_products_api),
-        ("Downloads Listing", test_downloads_api),
-        ("User Registration", test_user_registration),
-        ("User Login", test_user_login),
-        ("Authenticated Route", test_authenticated_route),
-        ("Order Creation", test_order_creation),
-        ("Ticket Creation", test_ticket_creation),
-        ("Download Tracking", test_download_tracking),
+        ("Students Listing", test_students_api),
+        ("Students Filter by Niveau", test_students_filter_by_niveau),
+        ("Students Filter by Classe", test_students_filter_by_classe),
+        ("Student Creation", test_create_student),
+        ("Classes Listing", test_classes_api),
+        ("Classes Filter by Niveau", test_classes_filter_by_niveau),
+        ("Matières Listing", test_matieres_api),
+        ("Matières Filter by Niveau", test_matieres_filter_by_niveau),
+        ("Note Creation", test_create_note),
+        ("Student Notes", test_get_student_notes),
+        ("Class Notes", test_get_classe_notes),
+        ("Bulletin Generation", test_generate_bulletin),
+        ("Student Bulletins", test_get_student_bulletins),
+        ("Enseignants Listing", test_enseignants_api),
+        ("Statistics Dashboard", test_statistics_dashboard),
     ]
     
     results = {}
@@ -425,7 +600,7 @@ def run_all_tests():
     print(f"\n🎯 Results: {passed}/{total} tests passed")
     
     if passed == total:
-        print("🎉 All backend APIs are working correctly!")
+        print("🎉 All SMARTSAK10 backend APIs are working correctly!")
         return True
     else:
         print(f"⚠️  {total - passed} test(s) failed - backend needs attention")
