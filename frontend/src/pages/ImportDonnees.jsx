@@ -80,7 +80,7 @@ const ImportDonnees = () => {
   const handleZipUpload = async (e) => {
     e.preventDefault();
     if (!zipFile || !ecole) {
-      setMessage({ type: 'error', text: 'Veuillez sélectionner un fichier ZIP et spécifier l\''école' });
+      setMessage({ type: 'error', text: "Veuillez sélectionner un fichier ZIP et spécifier l'école" });
       return;
     }
 
