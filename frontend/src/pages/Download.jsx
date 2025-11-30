@@ -18,6 +18,21 @@ const DownloadPage = () => {
     'https://images.pexels.com/photos/227731/pexels-photo-227731.jpeg',
   ];
 
+  useEffect(() => {
+    fetchDownloads();
+  }, []);
+
+  const fetchDownloads = async () => {
+    try {
+      const response = await downloadAPI.getDownloads();
+      setDownloads(response.data);
+    } catch (error) {
+      console.error('Error fetching downloads:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % screenshots.length);
   };
@@ -26,9 +41,16 @@ const DownloadPage = () => {
     setCurrentImageIndex((prev) => (prev - 1 + screenshots.length) % screenshots.length);
   };
 
-  const handleDownload = (type) => {
-    // Cette fonction sera connectée au backend plus tard
-    alert(`Téléchargement de ${type} sera disponible prochainement!`);
+  const handleDownload = async (downloadId, downloadName) => {
+    try {
+      const response = await downloadAPI.trackDownload(downloadId);
+      alert(`Téléchargement de ${downloadName} commencé!`);
+      // In a real scenario, you would trigger the actual file download here
+      // window.location.href = response.data.download_url;
+    } catch (error) {
+      alert('Erreur lors du téléchargement. Veuillez réessayer.');
+      console.error('Download error:', error);
+    }
   };
 
   return (
