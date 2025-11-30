@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
-const API_URL = `${BACKEND_URL}/api`;
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || '';
+const API_URL = BACKEND_URL ? `${BACKEND_URL}/api` : '/api';
 const USER_EMAIL = process.env.REACT_APP_USER_EMAIL || 'konatdra@gmail.com';
 
 const api = axios.create({
