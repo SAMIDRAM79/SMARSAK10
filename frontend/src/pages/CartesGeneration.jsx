@@ -44,27 +44,27 @@ const CartesGeneration = () => {
   const modeles = [
     {
       id: 'standard',
-      nom: 'Standard Bleu-Vert',
-      description: '8 cartes par page, design classique',
-      couleurs: ['#1B89C7', '#2ECC71']
+      nom: 'Standard Bleu-Vert Vif',
+      description: '8 cartes avec logo, couleurs vives',
+      couleurs: ['#0066CC', '#00CC66', '#FFFFFF']
     },
     {
       id: 'logo_blanc',
-      nom: 'Logo Filigrane (Blanc)',
-      description: '8 cartes avec logo IEPP en arrière-plan',
-      couleurs: ['#FFFFFF', '#F8F9FA']
+      nom: 'Violet Vif avec Logo',
+      description: '8 cartes logo IEPP, bordure violette vive',
+      couleurs: ['#9C27B0', '#AB47BC', '#FFFFFF']
     },
     {
       id: 'logo_couleur',
-      nom: 'Logo Filigrane (Coloré)',
-      description: '8 cartes avec logo et fond coloré',
-      couleurs: ['#E3F2FD', '#1B89C7']
+      nom: 'Orange-Jaune Vif avec Logo',
+      description: '8 cartes logo, fond jaune et orange vif',
+      couleurs: ['#FFF9C4', '#FF6F00', '#FFB300']
     },
     {
       id: 'drapeau_ivoirien',
-      nom: 'Drapeau Ivoirien 🇨🇮',
-      description: '8 cartes aux couleurs nationales',
-      couleurs: ['#009E60', '#FFFFFF', '#FF9E00']
+      nom: 'Drapeau Ivoirien 🇨🇮 avec Logo',
+      description: '8 cartes logo, couleurs nationales vives',
+      couleurs: ['#00A86B', '#FFFFFF', '#FF8C00']
     }
   ];
 
