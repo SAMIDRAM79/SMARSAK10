@@ -11,7 +11,9 @@ on:
   workflow_dispatch:  # Permet de lancer manuellement
   pull_request:
     branches:
-      - main
+      - mainNo existing directories found containing cache-dependency-path="frontend/yarn.lock"
+Some specified paths were not resolved, unable to cache dependencies.
+
       - master
 
 jobs:
