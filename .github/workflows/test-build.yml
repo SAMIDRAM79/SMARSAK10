@@ -1,0 +1,66 @@
+name: Test Build (Fast)
+
+# Workflow rapide pour tester sans créer le .exe complet
+on:
+  pull_request:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: windows-latest
+    
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 🐍 Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: 📦 Install Backend deps
+        run: |
+          cd backend
+          python -m venv venv
+          .\venv\Scripts\activate
+          pip install -r requirements.txt
+        shell: cmd
+
+      - name: 📦 Install Frontend deps
+        run: |
+          cd frontend
+          npm install -g yarn
+          yarn install
+        shell: cmd
+
+      - name: 🧪 Test Backend
+        run: |
+          cd backend
+          .\venv\Scripts\activate
+          python -c "import fastapi; print('✓ FastAPI OK')"
+          python -c "import motor; print('✓ Motor OK')"
+          python -c "import reportlab; print('✓ ReportLab OK')"
+        shell: cmd
+
+      - name: 🧪 Test Frontend Build
+        run: |
+          cd frontend
+          yarn build
+        shell: cmd
+        env:
+          CI: false
+
+      - name: ✅ Tests Passed
+        run: |
+          echo "========================================"
+          echo "    TOUS LES TESTS SONT PASSÉS !"
+          echo "========================================"
+        shell: cmd
