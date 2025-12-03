@@ -64,7 +64,7 @@ jobs:
       - name: 📦 Install Frontend dependencies
         run: |
           cd frontend
-          yarn install --frozen-lockfile
+          yarn install
         shell: cmd
 
       # 8. Build du Frontend
