@@ -29,11 +29,9 @@
       "shortcutName": "SMARTSAK10"
     },
     "files": [
-      "main.js",
+      "main-simple.js",
       "package.json",
       "frontend-build/**/*",
-      "backend/**/*",
-      "python/**/*",
       "icon.ico"
     ],
     "directories": {
