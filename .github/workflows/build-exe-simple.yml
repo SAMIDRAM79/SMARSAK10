@@ -1,0 +1,82 @@
+name: Build Windows EXE Simple
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Backend dependencies
+        run: |
+          cd backend
+          python -m venv venv
+          .\venv\Scripts\activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+        shell: cmd
+
+      - name: Install Yarn
+        run: npm install -g yarn
+
+      - name: Install Frontend dependencies
+        run: |
+          cd frontend
+          yarn install
+        shell: cmd
+
+      - name: Build Frontend
+        run: |
+          cd frontend
+          yarn build
+        shell: cmd
+        env:
+          CI: false
+
+      - name: Setup Electron
+        run: |
+          if not exist electron-app mkdir electron-app
+          cd electron-app
+          npm init -y
+          npm install electron@27.0.0 electron-builder@24.6.4 --save-dev
+          if exist frontend-build rd /s /q frontend-build
+          xcopy /E /I /Y ..\frontend\build frontend-build
+          if exist backend rd /s /q backend
+          xcopy /E /I /Y ..\backend backend
+          if exist python rd /s /q python
+          xcopy /E /I /Y ..\backend\venv python
+        shell: cmd
+
+      - name: Build Windows Application
+        run: |
+          cd electron-app
+          npm run build:win
+        shell: cmd
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload Windows Installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: SMARTSAK10-Windows-Installer
+          path: |
+            electron-app/dist/*.exe
+          retention-days: 30
