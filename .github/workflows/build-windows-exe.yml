@@ -34,17 +34,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: 'pip'
-          cache-dependency-path: backend/requirements.txt
-
-      # 4. Cache des dépendances
-      - name: 💾 Cache Backend dependencies
-        uses: actions/cache@v3
-        with:
-          path: backend/venv
-          key: ${{ runner.os }}-venv-${{ hashFiles('backend/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-venv-
 
       # 5. Installer les dépendances Backend
       - name: 📦 Install Backend dependencies
