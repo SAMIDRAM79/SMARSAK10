@@ -247,9 +247,19 @@ const ImportDonnees = () => {
                 <p className="text-sm text-gray-500 mt-1">Format: .xls ou .xlsx</p>
               </div>
 
-              <Button type="submit" className="w-full" disabled={loading}>
+              {loading && uploadProgress > 0 && (
+                <div className="w-full bg-gray-200 rounded-full h-2.5 mb-4">
+                  <div 
+                    className="bg-blue-600 h-2.5 rounded-full transition-all duration-300" 
+                    style={{ width: `${uploadProgress}%` }}
+                  ></div>
+                  <p className="text-sm text-center text-gray-600 mt-1">{uploadProgress}% téléchargé...</p>
+                </div>
+              )}
+
+              <Button type="submit" className="w-full bg-blue-600 hover:bg-blue-700" disabled={loading}>
                 <FileText className="w-4 h-4 mr-2" />
-                {loading ? 'Importation...' : 'Importer les Candidats'}
+                {loading ? 'Importation en cours...' : 'Importer les Candidats'}
               </Button>
             </form>
           </CardContent>
