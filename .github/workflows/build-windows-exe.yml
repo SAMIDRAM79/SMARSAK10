@@ -104,7 +104,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 11. Lister les fichiers créés
+      # 10. Lister les fichiers créés
       - name: 📋 List built files
         run: |
           cd electron-app\dist
