@@ -132,7 +132,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 14. Notification de succès
+      # 13. Notification de succès
       - name: ✅ Build Success
         if: success()
         run: |
