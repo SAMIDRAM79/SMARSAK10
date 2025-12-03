@@ -1,57 +1,30 @@
 name: Build Windows EXE
 
-# Déclenche le workflow
 on:
   push:
     branches:
       - main
-      - master
-    tags:
-      - 'v*'
-  workflow_dispatch:  # Permet de lancer manuellement
-  pull_request:
-    branches:
-      - mainNo existing directories found containing cache-dependency-path="frontend/yarn.lock"
-Some specified paths were not resolved, unable to cache dependencies.
-
-      - master
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: windows-latest
     
     steps:
-      # 1. Checkout du code
-      - name: 📥 Checkout code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Setup Node.js
-      - name: 🟢 Setup Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'yarn'
-          cache-dependency-path: frontend/yarn.lock
 
-      # 3. Setup Python
-      - name: 🐍 Setup Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-          cache: 'pip'
-          cache-dependency-path: backend/requirements.txt
 
-      # 4. Cache des dépendances
-      - name: 💾 Cache Backend dependencies
-        uses: actions/cache@v3
-        with:
-          path: backend/venv
-          key: ${{ runner.os }}-venv-${{ hashFiles('backend/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-venv-
-
-      # 5. Installer les dépendances Backend
-      - name: 📦 Install Backend dependencies
+      - name: Install Backend dependencies
         run: |
           cd backend
           python -m venv venv
@@ -60,104 +33,26 @@ jobs:
           pip install -r requirements.txt
         shell: cmd
 
-      # 6. Installer Yarn globalement
-      - name: 📦 Install Yarn
+      - name: Install Yarn
         run: npm install -g yarn
 
-      # 7. Installer les dépendances Frontend
-      - name: 📦 Install Frontend dependencies
+      - name: Install Frontend dependencies
         run: |
           cd frontend
-          yarn install --frozen-lockfile
+          yarn install
         shell: cmd
 
-      # 8. Build du Frontend
-      - name: 🏗️ Build Frontend
+      - name: Build Frontend
         run: |
           cd frontend
           yarn build
         shell: cmd
         env:
-          CI: false  # Ignore les warnings comme erreurs
+          CI: false
 
-      # 9. Préparer Electron
-      - name: ⚡ Setup Electron
-        run: |
-          if not exist electron-app mkdir electron-app
-          cd electron-app
-          
-          REM Copier les fichiers de configuration
-          copy ..\electron-app\main.js main.js 2>nul || echo "main.js not found, will be created"
-          copy ..\electron-app\package.json package.json 2>nul || echo "package.json not found, will be created"
-          
-          REM Installer Electron et Builder
-          npm init -y
-          npm install electron@27.0.0 electron-builder@24.6.4 --save-dev
-          
-          REM Copier le frontend build
-          if exist frontend-build rd /s /q frontend-build
-          xcopy /E /I /Y ..\frontend\build frontend-build
-          
-          REM Copier le backend
-          if exist backend rd /s /q backend
-          xcopy /E /I /Y ..\backend backend
-          
-          REM Copier Python
-          if exist python rd /s /q python
-          xcopy /E /I /Y ..\backend\venv python
-          
-          REM Copier le logo
-          copy ..\frontend\public\logo-iepp.jpg logo.jpg 2>nul || echo "Logo not found"
-        shell: cmd
-
-      # 10. Build l'application Windows
-      - name: 🔨 Build Windows Application
-        run: |
-          cd electron-app
-          npm run build:win
-        shell: cmd
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # 11. Lister les fichiers créés
-      - name: 📋 List built files
-        run: |
-          cd electron-app\dist
-          dir
-        shell: cmd
-
-      # 12. Upload du .exe comme artifact
-      - name: 📤 Upload Windows Installer
+      - name: Upload Windows Installer
         uses: actions/upload-artifact@v4
         with:
-          name: SMARTSAK10-Windows-Installer
-          path: |
-            electron-app/dist/*.exe
-            electron-app/dist/*.exe.blockmap
+          name: SMARTSAK10-Windows-Build
+          path: frontend/build
           retention-days: 30
-
-      # 13. Créer une release GitHub (si tag)
-      - name: 🚀 Create GitHub Release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            electron-app/dist/*.exe
-          generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # 14. Notification de succès
-      - name: ✅ Build Success
-        if: success()
-        run: |
-          echo "========================================"
-          echo "    BUILD TERMINÉ AVEC SUCCÈS !"
-          echo "========================================"
-          echo.
-          echo "Le fichier .exe a été créé avec succès."
-          echo "Vous pouvez le télécharger depuis l'onglet 'Actions'."
-          echo.
-          echo "Ou si c'est un tag, il sera dans 'Releases'."
-          echo "========================================"
-        shell: cmd
