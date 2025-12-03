@@ -45,18 +45,18 @@ jobs:
           pip install -r requirements.txt
         shell: cmd
 
-      # 6. Installer Yarn globalement
+      # 5. Installer Yarn globalement
       - name: 📦 Install Yarn
         run: npm install -g yarn
 
-      # 7. Installer les dépendances Frontend
+      # 6. Installer les dépendances Frontend
       - name: 📦 Install Frontend dependencies
         run: |
           cd frontend
           yarn install
         shell: cmd
 
-      # 8. Build du Frontend
+      # 7. Build du Frontend
       - name: 🏗️ Build Frontend
         run: |
           cd frontend
