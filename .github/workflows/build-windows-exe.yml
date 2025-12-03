@@ -95,7 +95,7 @@ jobs:
           copy ..\frontend\public\logo-iepp.jpg logo.jpg 2>nul || echo "Logo not found"
         shell: cmd
 
-      # 10. Build l'application Windows
+      # 9. Build l'application Windows
       - name: 🔨 Build Windows Application
         run: |
           cd electron-app
