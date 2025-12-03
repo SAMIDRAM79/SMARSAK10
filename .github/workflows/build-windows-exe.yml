@@ -30,8 +30,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'yarn'
-          cache-dependency-path: frontend/yarn.lock
 
       # 3. Setup Python
       - name: 🐍 Setup Python
@@ -68,7 +66,7 @@ jobs:
       - name: 📦 Install Frontend dependencies
         run: |
           cd frontend
-          yarn install --frozen-lockfile
+          yarn install
         shell: cmd
 
       # 8. Build du Frontend
