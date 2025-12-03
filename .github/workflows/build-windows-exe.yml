@@ -65,7 +65,7 @@ jobs:
         env:
           CI: false  # Ignore les warnings comme erreurs
 
-      # 9. Préparer Electron
+      # 8. Préparer Electron
       - name: ⚡ Setup Electron
         run: |
           if not exist electron-app mkdir electron-app
