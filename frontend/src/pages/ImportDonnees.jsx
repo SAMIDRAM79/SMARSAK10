@@ -15,6 +15,7 @@ const ImportDonnees = () => {
   const [stats, setStats] = useState(null);
   const [doublons, setDoublons] = useState([]);
   const [showDoublons, setShowDoublons] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
 
   useEffect(() => {
     fetchAnneeScolaire();
