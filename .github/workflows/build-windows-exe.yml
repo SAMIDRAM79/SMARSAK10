@@ -111,7 +111,7 @@ jobs:
           dir
         shell: cmd
 
-      # 12. Upload du .exe comme artifact
+      # 11. Upload du .exe comme artifact
       - name: 📤 Upload Windows Installer
         uses: actions/upload-artifact@v4
         with:
