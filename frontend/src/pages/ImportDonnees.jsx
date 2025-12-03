@@ -93,6 +93,7 @@ const ImportDonnees = () => {
 
     setLoading(true);
     setMessage({ type: '', text: '' });
+    setUploadProgress(0);
 
     const formData = new FormData();
     formData.append('file', zipFile);
@@ -100,7 +101,11 @@ const ImportDonnees = () => {
 
     try {
       const response = await api.post('/import/photos/zip', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: { 'Content-Type': 'multipart/form-data' },
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          setUploadProgress(percentCompleted);
+        }
       });
       setMessage({ 
         type: 'success', 
@@ -114,6 +119,7 @@ const ImportDonnees = () => {
       setMessage({ type: 'error', text: error.response?.data?.detail || "Erreur lors de l'importation des photos" });
     } finally {
       setLoading(false);
+      setUploadProgress(0);
     }
   };
 
