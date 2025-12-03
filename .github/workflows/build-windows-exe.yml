@@ -35,7 +35,7 @@ jobs:
         with:
           python-version: '3.11'
 
-      # 5. Installer les dépendances Backend
+      # 4. Installer les dépendances Backend
       - name: 📦 Install Backend dependencies
         run: |
           cd backend
