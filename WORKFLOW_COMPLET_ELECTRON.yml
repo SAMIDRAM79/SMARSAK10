@@ -58,6 +58,7 @@ jobs:
           
           copy ..\electron-app\main.js main.js
           copy ..\electron-app\package.json package.json
+          copy ..\electron-app\icon.ico icon.ico
           
           npm install
           
@@ -69,8 +70,6 @@ jobs:
           
           if exist python rd /s /q python
           xcopy /E /I /Y ..\backend\venv python
-          
-          if exist ..\frontend\public\logo-iepp.jpg copy ..\frontend\public\logo-iepp.jpg logo.jpg
         shell: cmd
 
       - name: Build Windows Executable
