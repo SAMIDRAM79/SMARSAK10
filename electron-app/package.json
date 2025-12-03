@@ -30,7 +30,7 @@
       "frontend-build/**/*",
       "backend/**/*",
       "python/**/*",
-      "logo.jpg"
+      "icon.ico"
     ],
     "directories": {
       "output": "dist"
