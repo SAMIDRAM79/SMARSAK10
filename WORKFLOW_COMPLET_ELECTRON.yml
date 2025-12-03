@@ -1,0 +1,108 @@
+name: Build Windows EXE Complet
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Backend dependencies
+        run: |
+          cd backend
+          python -m venv venv
+          .\venv\Scripts\activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+        shell: cmd
+
+      - name: Install Yarn
+        run: npm install -g yarn
+
+      - name: Install Frontend dependencies
+        run: |
+          cd frontend
+          yarn install
+        shell: cmd
+
+      - name: Build Frontend
+        run: |
+          cd frontend
+          yarn build
+        shell: cmd
+        env:
+          CI: false
+
+      - name: Create Electron App Structure
+        run: |
+          if not exist electron-app mkdir electron-app
+          cd electron-app
+          
+          copy ..\electron-app\main.js main.js
+          copy ..\electron-app\package.json package.json
+          
+          npm install
+          
+          if exist frontend-build rd /s /q frontend-build
+          xcopy /E /I /Y ..\frontend\build frontend-build
+          
+          if exist backend rd /s /q backend
+          xcopy /E /I /Y ..\backend backend
+          
+          if exist python rd /s /q python
+          xcopy /E /I /Y ..\backend\venv python
+          
+          if exist ..\frontend\public\logo-iepp.jpg copy ..\frontend\public\logo-iepp.jpg logo.jpg
+        shell: cmd
+
+      - name: Build Windows Executable
+        run: |
+          cd electron-app
+          npm run build:win
+        shell: cmd
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: List built files
+        run: |
+          cd electron-app\dist
+          dir
+        shell: cmd
+
+      - name: Upload Windows Installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: SMARTSAK10-Windows-Installer
+          path: |
+            electron-app/dist/*.exe
+          retention-days: 30
+
+      - name: Build Success Notification
+        if: success()
+        run: |
+          echo ========================================
+          echo    BUILD TERMINE AVEC SUCCES !
+          echo ========================================
+          echo.
+          echo Le fichier .exe a ete cree avec succes.
+          echo Telechargez-le depuis l'onglet Actions - Artifacts.
+          echo ========================================
+        shell: cmd
