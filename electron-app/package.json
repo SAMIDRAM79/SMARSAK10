@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "Système de Management Scolaire - IEPP SAKASSOU",
   "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SAMIDRAM79/SMARSAK10"
+  },
   "scripts": {
     "start": "electron .",
     "build:win": "electron-builder --win",
