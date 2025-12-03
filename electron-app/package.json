@@ -2,7 +2,7 @@
   "name": "smartsak10",
   "version": "1.0.0",
   "description": "Système de Management Scolaire - IEPP SAKASSOU",
-  "main": "main.js",
+  "main": "main-simple.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/SAMIDRAM79/SMARSAK10"
