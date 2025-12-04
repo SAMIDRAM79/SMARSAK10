@@ -213,6 +213,13 @@ async def generer_cartes_pdf(
     email: str = Depends(verify_email)
 ):
     """Générer un PDF avec 8 cartes scolaires par page A4"""
+    # Vérifier que le modèle existe
+    if modele not in MODELES_COULEURS:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=f"Modèle '{modele}' inconnu. Modèles disponibles: {list(MODELES_COULEURS.keys())}"
+        )
+    
     db = get_db()
     
     # Récupérer les candidats de l'école
