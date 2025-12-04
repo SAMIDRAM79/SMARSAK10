@@ -84,11 +84,12 @@ const CartesGeneration = () => {
 
     try {
       // Appel API pour générer le PDF des cartes
-      const response = await api.post('/cartes/generer', {
-        ecole: ecoleSelectionnee,
-        modele: modeleSelectionne,
-        annee_scolaire: anneeScolaire
-      }, {
+      const response = await api.post('/cartes/generer', null, {
+        params: {
+          ecole: ecoleSelectionnee,
+          modele: modeleSelectionne,
+          annee_scolaire: anneeScolaire
+        },
         responseType: 'blob'
       });
 
