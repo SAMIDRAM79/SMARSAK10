@@ -1,42 +1,31 @@
-name: Build Windows EXE
+name: Build Windows EXE Complet
 
-# Déclenche le workflow
 on:
   push:
     branches:
       - main
-      - master
-    tags:
-      - 'v*'
-  workflow_dispatch:  # Permet de lancer manuellement
-  pull_request:
-    branches:
-      - main
-      - master
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: windows-latest
+    timeout-minutes: 60
     
     steps:
-      # 1. Checkout du code
-      - name: 📥 Checkout code
+      - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Setup Node.js
-      - name: 🟢 Setup Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
-      # 3. Setup Python
-      - name: 🐍 Setup Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      # 4. Installer les dépendances Backend
-      - name: 📦 Install Backend dependencies
+      - name: Install Backend dependencies
         run: |
           cd backend
           python -m venv venv
@@ -45,59 +34,39 @@ jobs:
           pip install -r requirements.txt
         shell: cmd
 
-      # 5. Installer Yarn globalement
-      - name: 📦 Install Yarn
+      - name: Install Yarn
         run: npm install -g yarn
 
-      # 6. Installer les dépendances Frontend
-      - name: 📦 Install Frontend dependencies
+      - name: Install Frontend dependencies
         run: |
           cd frontend
           yarn install
         shell: cmd
 
-      # 7. Build du Frontend
-      - name: 🏗️ Build Frontend
+      - name: Build Frontend
         run: |
           cd frontend
           yarn build
         shell: cmd
         env:
-          CI: false  # Ignore les warnings comme erreurs
+          CI: false
 
-      # 8. Préparer Electron
-      - name: ⚡ Setup Electron
+      - name: Create Electron App Structure
         run: |
           if not exist electron-app mkdir electron-app
           cd electron-app
           
-          REM Copier les fichiers de configuration
           copy ..\electron-app\main-simple.js main-simple.js
           copy ..\electron-app\package.json package.json
           copy ..\electron-app\icon.ico icon.ico
           
-          REM Installer Electron et Builder
-          npm init -y
-          npm install electron@27.0.0 electron-builder@24.6.4 --save-dev
+          npm install
           
-          REM Copier le frontend build
           if exist frontend-build rd /s /q frontend-build
           xcopy /E /I /Y ..\frontend\build frontend-build
-          
-          REM Copier le backend
-          if exist backend rd /s /q backend
-          xcopy /E /I /Y ..\backend backend
-          
-          REM Copier Python
-          if exist python rd /s /q python
-          xcopy /E /I /Y ..\backend\venv python
-          
-          REM Copier le logo
-          copy ..\frontend\public\logo-iepp.jpg logo.jpg 2>nul || echo "Logo not found"
         shell: cmd
 
-      # 9. Build l'application Windows
-      - name: 🔨 Build Windows Application
+      - name: Build Windows Executable
         run: |
           cd electron-app
           npm run build:win
@@ -105,45 +74,28 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # 10. Lister les fichiers créés
-      - name: 📋 List built files
+      - name: List built files
         run: |
           cd electron-app\dist
           dir
         shell: cmd
 
-      # 11. Upload du .exe comme artifact
-      - name: 📤 Upload Windows Installer
+      - name: Upload Windows Installer
         uses: actions/upload-artifact@v4
         with:
           name: SMARTSAK10-Windows-Installer
           path: |
             electron-app/dist/*.exe
-            electron-app/dist/*.exe.blockmap
           retention-days: 30
 
-      # 12. Créer une release GitHub (si tag)
-      - name: 🚀 Create GitHub Release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v1
-        with:
-          files: |
-            electron-app/dist/*.exe
-          generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # 13. Notification de succès
-      - name: ✅ Build Success
+      - name: Build Success Notification
         if: success()
         run: |
-          echo "========================================"
-          echo "    BUILD TERMINÉ AVEC SUCCÈS !"
-          echo "========================================"
+          echo ========================================
+          echo    BUILD TERMINE AVEC SUCCES !
+          echo ========================================
           echo.
-          echo "Le fichier .exe a été créé avec succès."
-          echo "Vous pouvez le télécharger depuis l'onglet 'Actions'."
-          echo.
-          echo "Ou si c'est un tag, il sera dans 'Releases'."
-          echo "========================================"
+          echo Le fichier .exe a ete cree avec succes.
+          echo Telechargez-le depuis l'onglet Actions - Artifacts.
+          echo ========================================
         shell: cmd
