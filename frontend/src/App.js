@@ -7,6 +7,7 @@ import Parametres from './pages/Parametres';
 import ImportDonnees from './pages/ImportDonnees';
 import RepartitionCEPE from './pages/RepartitionCEPE';
 import CartesGeneration from './pages/CartesGeneration';
+import DocumentsOfficiels from './pages/DocumentsOfficiels';
 import Students from './pages/Students';
 import Classes from './pages/Classes';
 import Notes from './pages/Notes';
