@@ -119,17 +119,32 @@ def dessiner_carte(c, x, y, largeur, hauteur, candidat, modele, logo_path=None):
     c.setFillColor(HexColor("#FFFFFF"))
     c.drawCentredString(x + largeur/2, y + hauteur - 11.5*mm, candidat.get("annee_scolaire", "2024-2025"))
     
-    # Photo du candidat (si disponible)
+    # Photo du candidat (si disponible) - Haute résolution
     photo_url = candidat.get("photo_url")
     if photo_url:
         photo_path = f"/app/backend{photo_url}"
         if os.path.exists(photo_path):
             try:
+                # Ouvrir et redimensionner l'image pour une meilleure netteté
+                img = Image.open(photo_path)
+                # Convertir en RGB si nécessaire
+                if img.mode != 'RGB':
+                    img = img.convert('RGB')
+                # Redimensionner avec haute qualité
+                target_size = (300, 300)  # Résolution plus élevée
+                img = img.resize(target_size, Image.Resampling.LANCZOS)
+                
+                # Sauvegarder temporairement
+                img_buffer = BytesIO()
+                img.save(img_buffer, format='JPEG', quality=95, optimize=True)
+                img_buffer.seek(0)
+                
                 photo_size = 20*mm
                 photo_x = x + (largeur - photo_size) / 2
                 photo_y = y + hauteur - 40*mm
-                c.drawImage(photo_path, photo_x, photo_y, width=photo_size, height=photo_size, mask='auto')
-            except:
+                c.drawImage(ImageReader(img_buffer), photo_x, photo_y, width=photo_size, height=photo_size, mask='auto')
+            except Exception as e:
+                print(f"Erreur photo: {e}")
                 pass
     
     # Informations du candidat
