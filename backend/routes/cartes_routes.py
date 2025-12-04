@@ -218,11 +218,11 @@ async def generer_cartes_pdf(
     c = canvas.Canvas(buffer, pagesize=A4)
     width, height = A4
     
-    # Dimensions des cartes (8 par page: 2 colonnes x 4 lignes)
-    marge = 10*mm
-    espace_entre = 5*mm
-    largeur_carte = (width - 2*marge - espace_entre) / 2
-    hauteur_carte = (height - 2*marge - 3*espace_entre) / 4
+    # Dimensions des cartes réduites (8 par page: 2 colonnes x 4 lignes)
+    marge = 12*mm  # Marge augmentée
+    espace_entre = 6*mm  # Espacement augmenté
+    largeur_carte = (width - 2*marge - espace_entre) / 2 * 0.95  # 5% plus petites
+    hauteur_carte = (height - 2*marge - 3*espace_entre) / 4 * 0.95  # 5% plus petites
     
     # Chemin du logo
     logo_path = "/app/frontend/public/logo-iepp.jpg"
