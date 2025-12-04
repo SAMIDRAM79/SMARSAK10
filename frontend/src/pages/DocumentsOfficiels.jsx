@@ -67,12 +67,12 @@ const DocumentsOfficiels = () => {
       
       // Si c'est une réponse blob, ne pas essayer d'accéder à response.data.detail
       if (error.response && error.response.data instanceof Blob) {
-        const text = await error.response.data.text();
         try {
+          const text = await error.response.data.text();
           const jsonError = JSON.parse(text);
           errorMessage = jsonError.detail || errorMessage;
         } catch {
-          errorMessage = text || errorMessage;
+          errorMessage = "Erreur lors de la génération du document. Cette fonctionnalité sera bientôt disponible.";
         }
       } else if (error.response?.data?.detail) {
         errorMessage = error.response.data.detail;
