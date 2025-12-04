@@ -15,8 +15,13 @@ const CartesGeneration = () => {
 
   useEffect(() => {
     fetchParametres();
-    fetchEcoles();
   }, []);
+
+  useEffect(() => {
+    if (anneeScolaire) {
+      fetchEcoles();
+    }
+  }, [anneeScolaire]);
 
   const fetchParametres = async () => {
     try {
