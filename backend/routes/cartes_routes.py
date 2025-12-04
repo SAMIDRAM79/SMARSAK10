@@ -228,9 +228,10 @@ async def generer_cartes_pdf(
             detail="Aucun candidat trouvé pour cette école"
         )
     
-    # Créer le PDF en mémoire
+    # Créer le PDF en mémoire avec haute résolution
     buffer = BytesIO()
     c = canvas.Canvas(buffer, pagesize=A4)
+    c.setPageCompression(1)  # Compression optimisée
     width, height = A4
     
     # Dimensions des cartes réduites (8 par page: 2 colonnes x 4 lignes)
