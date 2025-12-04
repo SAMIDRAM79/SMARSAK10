@@ -91,7 +91,7 @@ def dessiner_carte(c, x, y, largeur, hauteur, candidat, modele, logo_path=None):
                 c.setFillAlpha(0.08)  # Très transparent pour fond blanc
             c.drawImage(logo_path, logo_x, logo_y, width=logo_size, height=logo_size, mask='auto')
             c.restoreState()
-        except:
+        except Exception:
             pass
     
     # En-tête avec logo petit - POUR TOUS LES MODÈLES
@@ -100,7 +100,7 @@ def dessiner_carte(c, x, y, largeur, hauteur, candidat, modele, logo_path=None):
             logo_size = 14*mm
             # Petit logo en haut à gauche
             c.drawImage(logo_path, x + 5*mm, y + hauteur - 16*mm, width=logo_size, height=logo_size, mask='auto')
-        except:
+        except Exception:
             pass
     
     # Bannière colorée en haut
