@@ -72,8 +72,9 @@ jobs:
           cd electron-app
           
           REM Copier les fichiers de configuration
-          copy ..\electron-app\main.js main.js 2>nul || echo "main.js not found, will be created"
-          copy ..\electron-app\package.json package.json 2>nul || echo "package.json not found, will be created"
+          copy ..\electron-app\main-simple.js main-simple.js
+          copy ..\electron-app\package.json package.json
+          copy ..\electron-app\icon.ico icon.ico
           
           REM Installer Electron et Builder
           npm init -y
