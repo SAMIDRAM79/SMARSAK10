@@ -242,10 +242,10 @@ async def generer_cartes_pdf(
     width, height = A4
     
     # Dimensions des cartes réduites (8 par page: 2 colonnes x 4 lignes)
-    marge = 12*mm  # Marge augmentée
-    espace_entre = 6*mm  # Espacement augmenté
-    largeur_carte = (width - 2*marge - espace_entre) / 2 * 0.95  # 5% plus petites
-    hauteur_carte = (height - 2*marge - 3*espace_entre) / 4 * 0.95  # 5% plus petites
+    marge = 15*mm  # Marge augmentée
+    espace_entre = 8*mm  # Espacement augmenté
+    largeur_carte = (width - 2*marge - espace_entre) / 2 * 0.85  # 15% plus petites
+    hauteur_carte = (height - 2*marge - 3*espace_entre) / 4 * 0.85  # 15% plus petites
     
     # Chemin du logo
     logo_path = "/app/frontend/public/logo-iepp.jpg"
