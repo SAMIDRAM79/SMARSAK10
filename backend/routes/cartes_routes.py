@@ -253,7 +253,6 @@ async def generer_cartes_pdf(
     # Générer les cartes
     for i, candidat in enumerate(candidats):
         # Calculer la position sur la page
-        page_index = i // 8
         carte_index = i % 8
         
         # Nouvelle page si nécessaire
