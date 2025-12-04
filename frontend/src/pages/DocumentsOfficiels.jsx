@@ -240,7 +240,7 @@ const DocumentsOfficiels = () => {
               </p>
               <p className="text-sm text-amber-800 mt-2">
                 Les documents générés seront conformes aux modèles officiels de la DECO 
-                (Direction des Examens et Concours de Côte d'Ivoire).
+                (Direction des Examens et Concours de Côte d&apos;Ivoire).
               </p>
             </div>
           </div>
