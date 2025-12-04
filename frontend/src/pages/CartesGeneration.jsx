@@ -239,7 +239,7 @@ const CartesGeneration = () => {
                   <li>✓ Photo du candidat</li>
                   <li>✓ Matricule, Nom, Prénoms</li>
                   <li>✓ Date de naissance</li>
-                  <li>✓ Nom de l'école</li>
+                  <li>✓ Nom de l&apos;école</li>
                   <li>✓ Classe et Niveau</li>
                   <li>✓ Emplacement émargement directeur</li>
                   <li>✓ <strong>Logo IEPP SAKASSOU sur TOUTES les cartes</strong></li>
