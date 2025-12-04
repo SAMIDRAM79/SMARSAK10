@@ -104,7 +104,22 @@ const CartesGeneration = () => {
       setMessage({ type: 'success', text: 'Cartes générées avec succès !' });
     } catch (error) {
       console.error('Erreur:', error);
-      setMessage({ type: 'error', text: "Erreur lors de la génération des cartes" });
+      let errorMessage = "Erreur lors de la génération des cartes";
+      
+      // Si c'est une réponse blob, ne pas essayer d'accéder à response.data.detail
+      if (error.response && error.response.data instanceof Blob) {
+        const text = await error.response.data.text();
+        try {
+          const jsonError = JSON.parse(text);
+          errorMessage = jsonError.detail || errorMessage;
+        } catch {
+          errorMessage = text || errorMessage;
+        }
+      } else if (error.response?.data?.detail) {
+        errorMessage = error.response.data.detail;
+      }
+      
+      setMessage({ type: 'error', text: errorMessage });
     } finally {
       setLoading(false);
     }
