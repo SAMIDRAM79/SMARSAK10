@@ -63,9 +63,24 @@ const DocumentsOfficiels = () => {
       setMessage({ type: 'success', text: 'Document généré avec succès !' });
     } catch (error) {
       console.error('Erreur:', error);
+      let errorMessage = "Erreur lors de la génération du document. Cette fonctionnalité sera bientôt disponible.";
+      
+      // Si c'est une réponse blob, ne pas essayer d'accéder à response.data.detail
+      if (error.response && error.response.data instanceof Blob) {
+        const text = await error.response.data.text();
+        try {
+          const jsonError = JSON.parse(text);
+          errorMessage = jsonError.detail || errorMessage;
+        } catch {
+          errorMessage = text || errorMessage;
+        }
+      } else if (error.response?.data?.detail) {
+        errorMessage = error.response.data.detail;
+      }
+      
       setMessage({ 
         type: 'error', 
-        text: error.response?.data?.detail || "Erreur lors de la génération du document. Cette fonctionnalité sera bientôt disponible." 
+        text: errorMessage
       });
     } finally {
       setLoading(false);
