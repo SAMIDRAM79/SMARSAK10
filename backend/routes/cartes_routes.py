@@ -51,25 +51,28 @@ def dessiner_carte(c, x, y, largeur, hauteur, candidat, modele, logo_path=None):
     """Dessiner une carte scolaire individuelle"""
     couleurs = MODELES_COULEURS.get(modele, MODELES_COULEURS["standard"])
     
-    # Fond de la carte
+    # Rayon pour les coins arrondis
+    rayon = 3*mm
+    
+    # Fond de la carte avec coins arrondis
     c.setFillColor(HexColor(couleurs["fond"]))
-    c.rect(x, y, largeur, hauteur, fill=1, stroke=0)
+    c.roundRect(x, y, largeur, hauteur, rayon, fill=1, stroke=0)
     
     # Bordure spéciale pour le modèle drapeau ivoirien
     if modele == "drapeau_ivoirien":
         # Bande verte à gauche
         c.setFillColor(HexColor(couleurs["bordure_gauche"]))
-        c.rect(x, y, 5*mm, hauteur, fill=1, stroke=0)
+        c.roundRect(x, y, 5*mm, hauteur, rayon, fill=1, stroke=0)
         # Bande orange à droite
         c.setFillColor(HexColor(couleurs["bordure_droite"]))
-        c.rect(x + largeur - 5*mm, y, 5*mm, hauteur, fill=1, stroke=0)
+        c.roundRect(x + largeur - 5*mm, y, 5*mm, hauteur, rayon, fill=1, stroke=0)
         # Bordure principale
         c.setStrokeColor(HexColor(couleurs["titre"]))
     else:
         c.setStrokeColor(HexColor(couleurs["bordure"]))
     
-    c.setLineWidth(2)  # Bordure plus épaisse
-    c.rect(x, y, largeur, hauteur, fill=0, stroke=1)
+    c.setLineWidth(2.5)  # Bordure plus épaisse et nette
+    c.roundRect(x, y, largeur, hauteur, rayon, fill=0, stroke=1)
     
     # LOGO EN FILIGRANE AU CENTRE - POUR TOUS LES MODÈLES
     if logo_path and os.path.exists(logo_path):
